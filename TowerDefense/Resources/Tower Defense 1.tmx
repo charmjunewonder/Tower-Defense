@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="20" height="17" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="TowerDefense1" tilewidth="32" tileheight="32" spacing="1" margin="1">
+  <image source="ishot-36.png" width="670" height="570"/>
+ </tileset>
+ <layer name="Background" width="20" height="17">
+  <data encoding="base64" compression="zlib">
+   eJwtw2eYCAQAANAz75y9zplnnM3h7H1njzubRJJNVmRlj7JH2cqeZYeMUMlWNtlKZvbKXu+H73svTkBAQFzjGd8EJjTQIBMZbGKTmNRkJjeFKU1latOY1hDTGWp6M5jRTGY2i2FmNZvZzWG4Oc1lbvOY13zmt4AFjbCQhS1ipEUtZnFLWNJSlraMZS1neStY0SijrWRlq1jVala3hjWtZW1jjLWOda1nfRvY0EY2tokf2NQPbWZzP7KFH9vST2xla9vY1na2t4Md7eSndraLXe1mdz+zhz393F72to997ecX9neAAx3kYIc41GEOd4Rf+pUjHeVoxzjWcY53ghOd5Nd+42SnONVpTneGM53lt37nbOc413nOd4ELXeRil7jUZX7vDy53hStd5WrXuNYfXed6N/iTG93kZrf4s1vd5nZ/8Vd/c4e/u9Nd7naPe93nfg/4h3960EMe9ohHPeZxT3jSvzzlac941nOe94IX/dt/vOS/XvaKV73mdW/4nze95W3veNd73veBD33kY//3iU995nNf+NJXvvaNbw2Ig3GNZ3wTmNBAg0xksIlNYlKTmdwUpjSVqU1jWkNMZ6jpzWBGM5nZLIaZ1WxmN4fh5jSXuc1jXvOZ3wIWNMJCFraIkRa1mMUtYUlLWdoylrWc5a1gRaOMtpKVrWJVq1ndGta0lrWNMdY61rWe9W1gw/ffAZFpjcc=
+  </data>
+ </layer>
+ <layer name="unBuidable" width="20" height="17">
+  <data encoding="base64" compression="zlib">
+   eJy1zLkyg1EYgOEkYonEntiXyi7WypbEXtmvwUW4CBehRK00aiVq7kCBsVR4jBTGyCQjceZ/5vznO2feYCAQCFFGmHKqiHzbq4kSo4Za6qingUaaiJOgmRZaaQv8fQ0wyBDDjJAsojfHPCnSZFgoovcfa6/Evf0S9w5K3DvMc3/EMScF9k7z3J9l9/MCexd57i+54rrA3g23Bb79bd39ON/zwGP2/MQzL7zmaLzx/vkT9BGijDDlVFAZ/HobsVcTJRb8vddo3kScBM200Eob7XTQSRfd9ORo9Zr30c8AgwwxzAhJRhljnAkmmcrRmzafYZY55kmRJsMCiyyxzAqrrOXorZtvsMkW2+ywm/UBxPEjQw==
+  </data>
+ </layer>
+ <layer name="Buildable" width="20" height="17">
+  <data encoding="base64" compression="zlib">
+   eJy1zjkvRGEUxvHRaQTfgMygtGcGX4DMWApCTINCqOwiYmnsEbFU1ogElaUQuikRa2WX2CpLUGgEif8kT3FzzZWJiZP88tx533POvDbb/1cikpCMFKSa7u1wIA7xSJC/lhMuZCATWUHsK4UXxSgx3bnhQS7ykI8CMVYhivTtFf/eGtSiDvVoQBnKUSHGqlRWodrivV3oRg96tbMRTWhWT4uyVdmGdnSgU3y68+l9xp196MeAegaVQ8phjGAUYxbvHMcEJjGFaczoblY5Z+ifxwIWLfYtYRkrWDXdrSnXsWEx7y/fL3f+2sQWtvV7B7vYwz4OcGgxe4RjnOAUZzjHBS4NfVe4xg1ucWex7x4PeMSTzp7xgldT71uA+XflBz7xZfE/gSo87OdZhM4iyShEB+gJtmKYjdW8nXSEsMtfacyna4eTdIW4L5v5HO1wk54g9n0DMZNKAw==
+  </data>
+ </layer>
+ <layer name="Runable" width="20" height="17">
+  <data encoding="base64" compression="zlib">
+   eJzFzjsOAVEUxvGxAYuwBizA23RIVGhIJF6tQqdVaLw6BYVCg8ar8OwVluC1BpV/M8nk5mbMjEmc5Jfcc+49X66i/Ke88MFvYzeIEMKIIIoY4lBt5AUkswyyyH3ZTSCJlG6WtvGHPAq6vqg7l1BGBVXUTOTVhb5h8LZpIq8l9G3Jmw666KGPgUHeUOhHGAuzidBPJTkzzLGQ3C2xwhobbIX7HfY44IgTzgZ/Fusi9FcLu7K64Y4Hnnj9mKfV26EcrdwuZ/M8Duf5Hc5TLeR9AHi5I5A=
+  </data>
+ </layer>
+ <objectgroup name="Routine" width="20" height="17" visible="0">
+  <object x="624" y="147"/>
+  <object x="595" y="148"/>
+  <object x="594" y="180"/>
+  <object x="594" y="208"/>
+  <object x="594" y="243"/>
+  <object x="592" y="270"/>
+  <object x="559" y="274"/>
+  <object x="526" y="272"/>
+  <object x="524" y="310"/>
+  <object x="495" y="306"/>
+  <object x="469" y="305"/>
+  <object x="428" y="308"/>
+  <object x="401" y="304"/>
+  <object x="372" y="304"/>
+  <object x="367" y="273"/>
+  <object x="367" y="244"/>
+  <object x="367" y="339"/>
+  <object x="368" y="365"/>
+  <object x="335" y="241"/>
+  <object x="303" y="240"/>
+  <object x="304" y="209"/>
+  <object x="302" y="183"/>
+  <object x="271" y="176"/>
+  <object x="238" y="178"/>
+  <object x="207" y="174"/>
+  <object x="178" y="174"/>
+  <object x="178" y="148"/>
+  <object x="180" y="116"/>
+  <object x="364" y="114"/>
+  <object x="338" y="368"/>
+  <object x="304" y="365"/>
+  <object x="276" y="368"/>
+  <object x="240" y="370"/>
+  <object x="240" y="338"/>
+  <object x="239" y="305"/>
+  <object x="239" y="274"/>
+  <object x="238" y="243"/>
+  <object x="271" y="244"/>
+  <object x="304" y="401"/>
+  <object x="305" y="434"/>
+  <object x="305" y="465"/>
+  <object x="304" y="498"/>
+  <object x="304" y="530"/>
+  <object x="209" y="305"/>
+  <object x="177" y="306"/>
+  <object x="143" y="304"/>
+  <object x="109" y="302"/>
+  <object x="109" y="276"/>
+  <object x="84" y="271"/>
+  <object x="83" y="243"/>
+  <object x="81" y="212"/>
+  <object x="78" y="176"/>
+  <object x="78" y="150"/>
+  <object x="45" y="149"/>
+  <object x="17" y="149"/>
+  <object x="182" y="78"/>
+  <object x="207" y="84"/>
+  <object x="244" y="82"/>
+  <object x="276" y="82"/>
+  <object x="305" y="84"/>
+  <object x="337" y="85"/>
+  <object x="333" y="51" width="1"/>
+  <object x="338" y="47"/>
+  <object x="371" y="47"/>
+  <object x="402" y="49"/>
+  <object x="402" y="82"/>
+  <object x="400" y="114"/>
+  <object x="335" y="113"/>
+ </objectgroup>
+ <objectgroup name="Factory" width="20" height="17">
+  <object x="654" y="147"/>
+  <object x="-13" y="147"/>
+  <object x="303" y="558"/>
+ </objectgroup>
+ <objectgroup name="End" width="20" height="17">
+  <object name="End" x="369" y="80"/>
+ </objectgroup>
+</map>
