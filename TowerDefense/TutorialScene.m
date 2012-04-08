@@ -18,6 +18,7 @@
 @synthesize currentLevel = _currentLevel;
 @synthesize gameHUD = _gameHUD;
 @synthesize baseAttributes = _baseAttributes;
+@synthesize buildable = _buildable;
 
 static TutorialScene *_TutorialScene = nil;
 
@@ -63,7 +64,11 @@ static TutorialScene *_TutorialScene = nil;
     if((self = [super init])) {				
 		self.tileMap = [CCTMXTiledMap tiledMapWithTMXFile:@"Tower Defense 1.tmx"];
         self.background = [_tileMap layerNamed:@"Background"];
+        self.buildable = [_tileMap layerNamed:@"Buildable"];
 		self.background.anchorPoint = ccp(0, 0);
+        //self.buildable.anchorPoint = ccp(150, 150);
+        //self.background.position = ccp(150, 150);
+        //self.buildable.position = ccp(150, 150);
 		[self addChild:_tileMap z:0];
 		
 		[self addWaypoint];
@@ -221,7 +226,7 @@ static TutorialScene *_TutorialScene = nil;
 	
 	WayPoint *waypoint = target.currentWaypoint;
 	target.position = waypoint.position;	
-	waypoint = [target getNextWaypoint ];
+	//waypoint = [target getNextWaypoint ];
 	
 	[self addChild:target z:1];
 	
@@ -232,10 +237,10 @@ static TutorialScene *_TutorialScene = nil;
     target.healthBar.position = ccp(target.position.x,(target.position.y+20));
     [self addChild:target.healthBar z:3];
 
-	int moveDuration = target.moveDuration;	
+	/*int moveDuration = target.moveDuration;	
 	id actionMove = [CCMoveTo actionWithDuration:moveDuration position:waypoint.position];
 	id actionMoveDone = [CCCallFuncN actionWithTarget:self selector:@selector(FollowPath:)];
-	[target runAction:[CCSequence actions:actionMove, actionMoveDone, nil]];
+	[target runAction:[CCSequence actions:actionMove, actionMoveDone, nil]];*/
 	
 	// Add to targets array
 	target.tag = 1;
@@ -246,10 +251,10 @@ static TutorialScene *_TutorialScene = nil;
 	DataModel *data = [DataModel getModel];
 	
 	Wave *wave = nil;
-    wave = [[Wave alloc] initWithCreep:[FastRedCreep creep] SpawnRate:1.0 RedCreeps:3 GreenCreeps:0 BrownCreeps:0];
+    wave = [[Wave alloc] initWithCreep:[FastRedCreep creep] SpawnRate:1.0 RedCreeps:1 GreenCreeps:0 BrownCreeps:0];
     [data.waves addObject:wave];
 	wave = nil;
-	wave = [[Wave alloc] initWithCreep:[FastRedCreep creep] SpawnRate:1.0 RedCreeps:5 GreenCreeps:0 BrownCreeps:0];
+	wave = [[Wave alloc] initWithCreep:[FastRedCreep creep] SpawnRate:1.0 RedCreeps:0 GreenCreeps:0 BrownCreeps:0];
     [data.waves addObject:wave];
 	wave = nil;
 	wave = [[Wave alloc] initWithCreep:[FastRedCreep creep] SpawnRate:1.0 RedCreeps:5 GreenCreeps:5 BrownCreeps:0];
@@ -293,17 +298,22 @@ static TutorialScene *_TutorialScene = nil;
 */
 - (BOOL) canBuildOnTilePosition:(CGPoint) position 
 {
-    CGRect gameLayerRect = CGRectMake(self.position.x,
+    /*CGRect gameLayerRect = CGRectMake(self.position.x,
                                       self.position.y,
                                       self.contentSize.width,
-                                      self.contentSize.height);
-    
-    if (CGRectContainsPoint(gameLayerRect, position)){
+                                      self.contentSize.height);*/
+    CGRect buildableLayerRect = CGRectMake(self.buildable.position.x,
+                                      self.buildable.position.y,
+                                      self.buildable.contentSize.width,
+                                      self.buildable.contentSize.height);
+
+    if (CGRectContainsPoint(buildableLayerRect, position)){
         CGPoint towerLocation = [self tileCoordForPosition: position];
-        
-        int tileGid = [self.background tileGIDAt:towerLocation];
+        if (towerLocation.x >= 20 || towerLocation.y >= 17 || towerLocation.x  < 0 || towerLocation.y < 0)
+            return false; // safe bound check 
+        int tileGid = [self.buildable tileGIDAt:towerLocation];
         NSDictionary *properties = [self.tileMap propertiesForGID:tileGid];
-        NSString *type = [properties valueForKey:@"buildable"];
+        NSString *type = [properties valueForKey:@"Buildable"];
         BOOL occupied = NO;
         DataModel *data = [DataModel getModel];
 
@@ -355,8 +365,8 @@ static TutorialScene *_TutorialScene = nil;
             default:
                 break;
         }
-
-		tower.position = ccp((towerLocation.x * 32), self.tileMap.contentSize.height - (towerLocation.y * 32));
+        //int yy = self.tileMap.contentSize.height - (towerLocation.y * 32);
+		tower.position = ccp((towerLocation.x * 32)+16, (self.tileMap.contentSize.height - (towerLocation.y * 32))-16);
         [self addChild:tower z:1];
         tower.tag = 1;
         [data.towers addObject:tower];
@@ -368,7 +378,7 @@ static TutorialScene *_TutorialScene = nil;
 	Creep *creep = (Creep *)sender;
 	
 	WayPoint *waypoint = [creep getNextWaypoint];
-    creep.currentWaypoint = waypoint;
+    //creep.currentWaypoint = waypoint;
     
 	id actionMove = [CCMoveTo actionWithDuration:creep.moveDuration position:waypoint.position];
 	id actionMoveDone = [CCCallFuncN actionWithTarget:self selector:@selector(FollowPath:)];

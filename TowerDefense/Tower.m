@@ -60,7 +60,7 @@
 
 - (void)checkTarget {
     double curDistance = ccpDistance(self.position, self.target.position);
-    if (self.target.hp <= 0 || curDistance > self.range){
+    if (self.target.isGone || self.target.hp <= 0 || curDistance > self.range){
         self.target = [self getClosestTarget];
     }
 }
@@ -72,7 +72,7 @@
 
 + (id)tower{
     MachineGunTower *tower = nil;
-    if ((tower = [[[super alloc] initWithFile:@"MachineGunTurret.png"]autorelease])) {
+    if ((tower = [[[super alloc] initWithFile:@"gem 1.png"]autorelease])) {
         BaseAttributes *baseAttributes = [BaseAttributes sharedAttributes];
         
         tower.damageMin = baseAttributes.baseMGDamage;
@@ -200,7 +200,7 @@
 + (id)tower {
 	
     FreezeTower *tower = nil;
-    if ((tower = [[[super alloc] initWithFile:@"FreezeTurret.png"] autorelease])) {
+    if ((tower = [[[super alloc] initWithFile:@"gem 2.png"] autorelease])) {
         BaseAttributes *baseAttributes = [BaseAttributes sharedAttributes];
         
         tower.damageMin = baseAttributes.baseFDamage;
@@ -332,7 +332,7 @@
 + (id)tower {
 	
     CannonTower *tower = nil;
-    if ((tower = [[[super alloc] initWithFile:@"CannonTurret.png"] autorelease])) {
+    if ((tower = [[[super alloc] initWithFile:@"gem 3.jpg"] autorelease])) {
         BaseAttributes *baseAttributes = [BaseAttributes sharedAttributes];
         
         tower.damageMin = baseAttributes.baseCDamage;

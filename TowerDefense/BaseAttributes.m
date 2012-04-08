@@ -116,9 +116,9 @@ static BaseAttributes *_sharedAttributes = nil;
        _baseClvlup2 = 750;
         
        _baseRedCreepHealth = 100;
-       _baseRedCreepMoveDur = 0.9;
+       _baseRedCreepMoveDur = 0.3;
        _baseGreenCreepHealth = 150;
-       _baseGreenCreepMoveDur = 2;
+       _baseGreenCreepMoveDur = 1;
        _baseBrownCreepHealth = 500;
        _baseBrownCreepMoveDur = 10;
         

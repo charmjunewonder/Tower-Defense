@@ -19,19 +19,20 @@
 }
 
 @property (nonatomic, assign) int hp;
-@property (nonatomic, assign) int moveDuration;
+@property (nonatomic, assign) float moveDuration;
 @property (nonatomic, retain) WayPoint *currentWaypoint;
 @property (nonatomic, assign) int lastWaypoint;
 @property (nonatomic, retain) CCProgressTimer *healthBar;
 @property (nonatomic, assign) int totalHp;
 @property (nonatomic, retain) NSMutableArray *path; // in reverse order!!!
+@property (nonatomic)BOOL isGone;
 
 
 - (Creep *) initWithCreep:(Creep *) copyFrom; 
 - (WayPoint *)getNextWaypoint;
 - (WayPoint *)getLastWaypoint;
 - (void)randomlyChooseStartNode;
-
+- (void)creepLogic:(ccTime)dt;
 @end
 
 @interface FastRedCreep : Creep {

@@ -18,6 +18,7 @@
 
 @property (nonatomic, retain) CCTMXTiledMap *tileMap;
 @property (nonatomic, retain) CCTMXLayer *background;
+@property (nonatomic, retain) CCTMXLayer *buildable;
 @property (nonatomic, retain) GameHUD *gameHUD;
 @property (nonatomic, retain) BaseAttributes *baseAttributes;
 @property (nonatomic, assign) int currentLevel;

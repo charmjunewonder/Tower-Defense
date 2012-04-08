@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D11C849315317238002B9921 /* gem 1.png in Resources */ = {isa = PBXBuildFile; fileRef = D11C849015317238002B9921 /* gem 1.png */; };
+		D11C849415317238002B9921 /* gem 2.png in Resources */ = {isa = PBXBuildFile; fileRef = D11C849115317238002B9921 /* gem 2.png */; };
+		D11C849515317238002B9921 /* gem 3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D11C849215317238002B9921 /* gem 3.jpg */; };
 		D14039E7152B53AF003C92DE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D14039E6152B53AF003C92DE /* QuartzCore.framework */; };
 		D14039E9152B53AF003C92DE /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D14039E8152B53AF003C92DE /* OpenGLES.framework */; };
 		D14039EB152B53AF003C92DE /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D14039EA152B53AF003C92DE /* OpenAL.framework */; };
@@ -158,6 +161,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D11C849015317238002B9921 /* gem 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "gem 1.png"; path = "Resources/gem 1.png"; sourceTree = "<group>"; };
+		D11C849115317238002B9921 /* gem 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "gem 2.png"; path = "Resources/gem 2.png"; sourceTree = "<group>"; };
+		D11C849215317238002B9921 /* gem 3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "gem 3.jpg"; path = "Resources/gem 3.jpg"; sourceTree = "<group>"; };
 		D14039E2152B53AF003C92DE /* TowerDefense.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TowerDefense.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D14039E6152B53AF003C92DE /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		D14039E8152B53AF003C92DE /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -524,6 +530,9 @@
 		D14039F7152B53AF003C92DE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D11C849015317238002B9921 /* gem 1.png */,
+				D11C849115317238002B9921 /* gem 2.png */,
+				D11C849215317238002B9921 /* gem 3.jpg */,
 				D14039FA152B53AF003C92DE /* fps_images.png */,
 				D1A0C18B15307E6600393827 /* ishot-36.png */,
 				D1A0C18715307DAF00393827 /* Tower Defense 1.tmx */,
@@ -959,6 +968,9 @@
 				D1A0C1861530569B00393827 /* tmw_desert_spacing.png in Resources */,
 				D1A0C18915307DAF00393827 /* Tower Defense 1.tmx in Resources */,
 				D1A0C18C15307E6600393827 /* ishot-36.png in Resources */,
+				D11C849315317238002B9921 /* gem 1.png in Resources */,
+				D11C849415317238002B9921 /* gem 2.png in Resources */,
+				D11C849515317238002B9921 /* gem 3.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

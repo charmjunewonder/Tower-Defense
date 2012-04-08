@@ -4,17 +4,17 @@
    version = "1.0">
    <FileBreakpoints>
       <FileBreakpoint
-         shouldBeEnabled = "Yes"
+         shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "TowerDefense/MenuLayer.m"
-         timestampString = "355334660.5328"
+         filePath = "TowerDefense/TutorialScene.m"
+         timestampString = "355564087.028629"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "37"
-         endingLineNumber = "37"
-         landmarkName = "-startGame"
+         startingLineNumber = "369"
+         endingLineNumber = "369"
+         landmarkName = "-addTower:tag:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -23,12 +23,12 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "TowerDefense/TutorialScene.m"
-         timestampString = "355508001.695893"
+         timestampString = "355564087.028629"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "116"
-         endingLineNumber = "116"
-         landmarkName = "-addWaypoint"
+         startingLineNumber = "317"
+         endingLineNumber = "317"
+         landmarkName = "-canBuildOnTilePosition:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -37,12 +37,12 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "TowerDefense/Creep.m"
-         timestampString = "355509976.901092"
+         timestampString = "355574370.85004"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "115"
-         endingLineNumber = "115"
-         landmarkName = "-findShortestPath"
+         startingLineNumber = "67"
+         endingLineNumber = "67"
+         landmarkName = "-getNextWaypoint"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -51,12 +51,54 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "TowerDefense/Creep.m"
-         timestampString = "355509976.901092"
+         timestampString = "355574370.85004"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "98"
-         endingLineNumber = "98"
-         landmarkName = "-findShortestPath"
+         startingLineNumber = "52"
+         endingLineNumber = "52"
+         landmarkName = "-getNextWaypoint"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "TowerDefense/Tower.m"
+         timestampString = "355569866.562959"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "63"
+         endingLineNumber = "63"
+         landmarkName = "-checkTarget"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "TowerDefense/Creep.m"
+         timestampString = "355574509.309161"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "82"
+         endingLineNumber = "82"
+         landmarkName = "-getNextWaypoint"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "TowerDefense/Creep.m"
+         timestampString = "355574370.85004"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "57"
+         endingLineNumber = "57"
+         landmarkName = "-getNextWaypoint"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

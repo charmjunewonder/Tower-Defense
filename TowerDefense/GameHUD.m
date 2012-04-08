@@ -49,7 +49,7 @@ static GameHUD *_sharedHUD = nil;
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default];
         
         movableSprites = [[NSMutableArray alloc] init];
-        NSArray *images = [NSArray arrayWithObjects:@"MachineGunTurret.png", @"FreezeTurret.png", @"CannonTurret.png", nil]; 
+        NSArray *images = [NSArray arrayWithObjects:@"gem 1.png", @"gem 2.png", @"gem 3.jpg", nil]; 
         for (int i = 0; i < images.count; ++i) {
             NSString *image = [images objectAtIndex:i];
             CCSprite *sprite = [CCSprite spriteWithFile:image];
@@ -261,11 +261,6 @@ static GameHUD *_sharedHUD = nil;
 		if (!CGRectContainsPoint(backgroundRect, touchLocation)) {
 			CGPoint touchLocationInGameLayer = [data.gameLayer convertTouchToNodeSpace:touch];
             [data.gameLayer addTower: touchLocationInGameLayer tag: selSprite.tag];
-			/*
-             CCSprite * newSprite = [CCSprite spriteWithTexture:[selSprite texture]];
-             newSprite.position = touchLocationInGameLayer;
-             [m._gameLayer addChild:newSprite];
-             */
 		}
 		
 		[self removeChild:selSprite cleanup:YES];

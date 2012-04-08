@@ -19,6 +19,7 @@
 @synthesize totalHp = _totalHp;
 @synthesize currentWaypoint = _currentWaypoint;
 @synthesize path = _path;
+@synthesize isGone = _isGone;
 
 - (id)copyWithZone:(NSZone *)zone {
 	Creep *copy = [[[self class] allocWithZone:zone] initWithCreep:self];
@@ -43,11 +44,18 @@
     
     return creep;
 }
-
+int inum = 0;
 - (WayPoint *)getNextWaypoint{
 	
 	DataModel *data = [DataModel getModel];
-	
+	if (inum == 6) {
+        //[self stopAllActions];
+        //[self unscheduleAllSelectors];
+        //[self pauseSchedulerAndActions];
+    }
+    if (inum == 7) {
+        //[self dealloc];
+    }
 	if (currentIndexAtPath == 0){
         gameHUD = [GameHUD sharedHUD];
         if (gameHUD.baseHpPercentage > 0) {
@@ -55,7 +63,8 @@
         }
         
         Creep *target = (Creep *) self;
-        
+        [self stopAllActions];
+        [self unscheduleAllSelectors];
         NSMutableArray *endtargetsToDelete = [[NSMutableArray alloc] init];
         [endtargetsToDelete addObject:target];
         for (Creep *target in endtargetsToDelete) {
@@ -64,12 +73,16 @@
             [self.parent removeChild:target cleanup:YES];
             self.healthBar = nil;
             [target stopAllActions];
+            [target unscheduleAllSelectors];
+            target.isGone = YES;
+            //[target dealloc];
         }
         endtargetsToDelete = nil;
-        return data.endNode;
+        target = nil;
+        return nil;
     }
-    
-	return [self.path objectAtIndex:--currentIndexAtPath];
+    inum++;
+	return [self.path objectAtIndex:currentIndexAtPath-1];
 }
 
 - (WayPoint *)getLastWaypoint{
@@ -79,12 +92,11 @@
 - (void)findShortestPath{
     NSMutableArray *fakeQueue = [NSMutableArray arrayWithCapacity:50];
     [fakeQueue addObject:self.currentWaypoint];
-    printf("Point : (%.0lf, %.0lf)\n", self.currentWaypoint.position.x, self.currentWaypoint.position.y);
     
     DataModel *data = [DataModel getModel];
     for (WayPoint *point in data.waypoints){
         point.isVisited = NO;
-        point.fromNode = nil;
+        point.fromNode = NULL;
     }
     
     int currentQueueObjectIndex = 0;
@@ -114,26 +126,27 @@
     }
     currentIndexAtPath = self.path.count;
 }
-
--(void)creepLogic:(ccTime)dt {
-	
+-(void)creepLogic:(ccTime)dt {	
 	
 	// Rotate creep to face next waypoint
-	WayPoint *waypoint = self.currentWaypoint;
-	
+	WayPoint *waypoint = [self getNextWaypoint];
+    //self.currentWaypoint = [self getNextWaypoint];
+    currentIndexAtPath--;    
+    
 	CGPoint waypointVector = ccpSub(waypoint.position, self.position);
 	CGFloat waypointAngle = ccpToAngle(waypointVector);
 	CGFloat cocosAngle = CC_RADIANS_TO_DEGREES(-1 * waypointAngle);
 	
 	float rotateSpeed = 0.02 / M_PI; // 1/2 second to roate 180 degrees
-	float rotateDuration = fabs(waypointAngle * rotateSpeed);    
-	
-	[self runAction:[CCSequence actions:
-					 [CCRotateTo actionWithDuration:rotateDuration angle:cocosAngle],
-					 nil]];		
+	float rotateDuration = fabs(waypointAngle * rotateSpeed); 
+    
+    id actionRotate = [CCRotateTo actionWithDuration:rotateDuration angle:cocosAngle];
+    id actionMove = [CCMoveTo actionWithDuration:self.moveDuration position:waypoint.position];
+
+	[self runAction:[CCSequence actions:actionRotate, actionMove, nil]];    
 }
 
--(void)healthBarLogic:(ccTime)dt {
+- (void)healthBarLogic:(ccTime)dt {
     
     //Update health bar pos and percentage.
     self.healthBar.position = ccp(self.position.x, (self.position.y+20));
@@ -169,8 +182,8 @@
         creep.hp = creep.totalHp = baseAttributes.baseRedCreepHealth;
         creep.moveDuration = baseAttributes.baseRedCreepMoveDur;
         [creep randomlyChooseStartNode];
-        [creep schedule:@selector(creepLogic:) interval:0.2];
         [creep schedule:@selector(healthBarLogic:)];
+        [creep schedule:@selector(creepLogic:) interval:creep.moveDuration];
     }
     return creep;
 }
@@ -187,7 +200,7 @@
         creep.hp = creep.totalHp = baseAttributes.baseGreenCreepHealth;
         creep.moveDuration = baseAttributes.baseGreenCreepMoveDur;
         [creep randomlyChooseStartNode];
-        [creep schedule:@selector(creepLogic:) interval:0.2];
+        [creep schedule:@selector(creepLogic:) interval:creep.moveDuration];
         [creep schedule:@selector(healthBarLogic:)];
     }
     return creep;
@@ -205,7 +218,7 @@
         creep.hp = creep.totalHp = baseAttributes.baseBrownCreepHealth;
         creep.moveDuration = baseAttributes.baseBrownCreepMoveDur;
         [creep randomlyChooseStartNode];
-        [creep schedule:@selector(creepLogic:) interval:0.2];
+        [creep schedule:@selector(creepLogic:) interval:creep.moveDuration];
         [creep schedule:@selector(healthBarLogic:)];
     } 
     

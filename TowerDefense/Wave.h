@@ -10,6 +10,8 @@
 #import "cocos2d.h"
 #import "Creep.h"
 
+@class Creep;
+
 @interface Wave : CCNode {
     
 }
