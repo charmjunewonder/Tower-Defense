@@ -41,4 +41,9 @@
 	return self;
 }
 
+- (void)dealloc{
+    [self.creepType release];
+    [super dealloc];
+}
+
 @end

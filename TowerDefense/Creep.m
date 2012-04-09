@@ -20,6 +20,8 @@
 @synthesize currentWaypoint = _currentWaypoint;
 @synthesize path = _path;
 @synthesize isGone = _isGone;
+@synthesize rotateAddition = _rotateAddition;
+//@synthesize scale = _scale;
 
 - (id)copyWithZone:(NSZone *)zone {
 	Creep *copy = [[[self class] allocWithZone:zone] initWithCreep:self];
@@ -75,7 +77,8 @@ int inum = 0;
             [target stopAllActions];
             [target unscheduleAllSelectors];
             target.isGone = YES;
-            //[target dealloc];
+            [target.path release];
+            [target release];
         }
         endtargetsToDelete = nil;
         target = nil;
@@ -135,15 +138,19 @@ int inum = 0;
     
 	CGPoint waypointVector = ccpSub(waypoint.position, self.position);
 	CGFloat waypointAngle = ccpToAngle(waypointVector);
-	CGFloat cocosAngle = CC_RADIANS_TO_DEGREES(-1 * waypointAngle);
-	
+	CGFloat cocosAngle = self.rotateAddition + CC_RADIANS_TO_DEGREES(-1 * waypointAngle);
+    
 	float rotateSpeed = 0.02 / M_PI; // 1/2 second to roate 180 degrees
 	float rotateDuration = fabs(waypointAngle * rotateSpeed); 
-    
     id actionRotate = [CCRotateTo actionWithDuration:rotateDuration angle:cocosAngle];
     id actionMove = [CCMoveTo actionWithDuration:self.moveDuration position:waypoint.position];
+	[self runAction:[CCSequence actions:actionRotate, actionMove, nil]];
+}
 
-	[self runAction:[CCSequence actions:actionRotate, actionMove, nil]];    
+- (void)scalingWhenMoving{
+    id bigger = [CCScaleTo actionWithDuration:0.3 scale:0.55];
+    id smaller = [CCScaleTo actionWithDuration:0.2 scale:0.5];
+    [self runAction:[CCSequence actions:bigger, smaller, nil]];
 }
 
 - (void)healthBarLogic:(ccTime)dt {
@@ -164,9 +171,11 @@ int inum = 0;
 }
 
 - (void)dealloc{
-    gameHUD = nil;
-    self.healthBar = nil;
-    self.currentWaypoint = nil;
+    [gameHUD release];
+
+    [self.healthBar release];
+    [self.currentWaypoint release];
+    [self.path release];
     [super dealloc];
 }
 
@@ -177,10 +186,11 @@ int inum = 0;
 + (id)creep {
     
     FastRedCreep *creep = nil;
-    if ((creep = [[[super alloc] initWithFile:@"Enemy1.png"] autorelease])) {
+    if ((creep = [[[super alloc] initWithFile:@"cockroach.png"] autorelease])) {
         BaseAttributes* baseAttributes = [BaseAttributes sharedAttributes];
         creep.hp = creep.totalHp = baseAttributes.baseRedCreepHealth;
         creep.moveDuration = baseAttributes.baseRedCreepMoveDur;
+        creep.rotateAddition = 90;
         [creep randomlyChooseStartNode];
         [creep schedule:@selector(healthBarLogic:)];
         [creep schedule:@selector(creepLogic:) interval:creep.moveDuration];
@@ -195,13 +205,16 @@ int inum = 0;
 + (id)creep {
     
     StrongGreenCreep *creep = nil;
-    if ((creep = [[[super alloc] initWithFile:@"Enemy2.png"] autorelease])) {
+    if ((creep = [[[super alloc] initWithFile:@"image 1797.png"] autorelease])) {
         BaseAttributes* baseAttributes = [BaseAttributes sharedAttributes];
         creep.hp = creep.totalHp = baseAttributes.baseGreenCreepHealth;
         creep.moveDuration = baseAttributes.baseGreenCreepMoveDur;
+        creep.rotateAddition = 90;
+        creep.scale = 0.5;
         [creep randomlyChooseStartNode];
         [creep schedule:@selector(creepLogic:) interval:creep.moveDuration];
         [creep schedule:@selector(healthBarLogic:)];
+        [creep schedule:@selector(scalingWhenMoving) interval:1];
     }
     return creep;
 }

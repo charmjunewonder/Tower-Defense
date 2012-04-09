@@ -337,4 +337,9 @@ static GameHUD *_sharedHUD = nil;
     }
 }
 
+- (void)dealloc{
+    [movableSprites release];
+    [super dealloc];
+}
+
 @end

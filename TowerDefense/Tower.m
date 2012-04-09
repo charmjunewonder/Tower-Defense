@@ -90,7 +90,7 @@
         tower.splashDist = 0;
         
 		tower.target = nil;
-        [tower schedule:@selector(towerLogic:) interval:0.1];
+        [tower schedule:@selector(towerLogic:) interval:1];
         [tower schedule:@selector(checkTarget) interval:0.5];
         [tower schedule:@selector(checkExperience) interval:0.5];
     }
@@ -134,17 +134,8 @@
     }
 	
 	if (self.target != nil) {
-        
-		//rotate the tower to face the nearest creep
-		CGPoint shootVector = ccpSub(self.target.position, self.position);
-		CGFloat shootAngle = ccpToAngle(shootVector);
-		CGFloat cocosAngle = CC_RADIANS_TO_DEGREES(-1 * shootAngle);
-		
-		float rotateSpeed = 0.02 / M_PI; // 0.02 second to roate 180 degrees
-		float rotateDuration = fabs(shootAngle * rotateSpeed);    
-		
+        		
 		[self runAction:[CCSequence actions:
-                         [CCRotateTo actionWithDuration:rotateDuration angle:cocosAngle],
                          [CCCallFunc actionWithTarget:self selector:@selector(finishFiring)],
                          nil]];		
 	}
@@ -176,20 +167,21 @@
         [self.parent addChild:self.nextProjectile z:1];
         [data.projectiles addObject:self.nextProjectile];
         
-        ccTime delta = 0.4;
+        ccTime delta = 0.2;
         CGPoint shootVector = ccpSub(self.target.position, self.position);
         CGPoint normalizedShootVector = ccpNormalize(shootVector);
         CGPoint overshotVector = ccpMult(normalizedShootVector, 200);
         CGPoint offscreenPoint = ccpAdd(self.position, overshotVector);
         
         [self.nextProjectile runAction:[CCSequence actions:
-                                        [CCMoveTo actionWithDuration:delta position:offscreenPoint],
+                                        [CCMoveTo actionWithDuration:delta position:self.target.position],
                                         [CCCallFuncN actionWithTarget:self selector:@selector(creepMoveFinished:)],
                                         nil]];
         
         self.nextProjectile.tag = 1;		
         
         self.nextProjectile = nil;
+        data = nil;
     }
 }
 
@@ -219,7 +211,7 @@
         
         
 		tower.target = nil;
-		[tower schedule:@selector(towerLogic:) interval:2];
+		[tower schedule:@selector(towerLogic:) interval:1];
         [tower schedule:@selector(checkTarget) interval:0.5];
         [tower schedule:@selector(checkExperience) interval:0.5];
 
@@ -270,16 +262,7 @@
 	
 	if (self.target != nil) {
 		
-		//rotate the tower to face the nearest creep
-		CGPoint shootVector = ccpSub(self.target.position, self.position);
-		CGFloat shootAngle = ccpToAngle(shootVector);
-		CGFloat cocosAngle = CC_RADIANS_TO_DEGREES(-1 * shootAngle);
-		
-		float rotateSpeed = 0.25 / M_PI; // 1/4 second to roate 180 degrees
-		float rotateDuration = fabs(shootAngle * rotateSpeed);    
-		
 		[self runAction:[CCSequence actions:
-						 [CCRotateTo actionWithDuration:rotateDuration angle:cocosAngle],
 						 [CCCallFunc actionWithTarget:self selector:@selector(finishFiring)],
 						 nil]];		
 	}
@@ -405,16 +388,7 @@
 	
 	if (self.target != nil) {
 		
-		//rotate the tower to face the nearest creep
-		CGPoint shootVector = ccpSub(self.target.position, self.position);
-		CGFloat shootAngle = ccpToAngle(shootVector);
-		CGFloat cocosAngle = CC_RADIANS_TO_DEGREES(-1 * shootAngle);
-		
-		float rotateSpeed = 0.5 / M_PI; // 1/2 second to roate 180 degrees
-		float rotateDuration = fabs(shootAngle * rotateSpeed);    
-		
 		[self runAction:[CCSequence actions:
-						 [CCRotateTo actionWithDuration:rotateDuration angle:cocosAngle],
 						 [CCCallFunc actionWithTarget:self selector:@selector(finishFiring)],
 						 nil]];		
 	}
@@ -458,6 +432,12 @@
         self.nextProjectile = nil;
     }
     
+}
+
+- (void)dealloc{
+    [self.target dealloc];
+    [self.nextProjectile dealloc];
+    [super dealloc];
 }
 
 @end

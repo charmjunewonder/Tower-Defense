@@ -251,10 +251,10 @@ static TutorialScene *_TutorialScene = nil;
 	DataModel *data = [DataModel getModel];
 	
 	Wave *wave = nil;
-    wave = [[Wave alloc] initWithCreep:[FastRedCreep creep] SpawnRate:1.0 RedCreeps:1 GreenCreeps:0 BrownCreeps:0];
+    wave = [[Wave alloc] initWithCreep:[FastRedCreep creep] SpawnRate:1.0 RedCreeps:3 GreenCreeps:2 BrownCreeps:0];
     [data.waves addObject:wave];
 	wave = nil;
-	wave = [[Wave alloc] initWithCreep:[FastRedCreep creep] SpawnRate:1.0 RedCreeps:0 GreenCreeps:0 BrownCreeps:0];
+	wave = [[Wave alloc] initWithCreep:[FastRedCreep creep] SpawnRate:1.0 RedCreeps:5 GreenCreeps:0 BrownCreeps:0];
     [data.waves addObject:wave];
 	wave = nil;
 	wave = [[Wave alloc] initWithCreep:[FastRedCreep creep] SpawnRate:1.0 RedCreeps:5 GreenCreeps:5 BrownCreeps:0];
@@ -581,6 +581,15 @@ static TutorialScene *_TutorialScene = nil;
         }
     }
 
+}
+
+- (void)dealloc{
+    [self.tileMap release];
+    [self.background release];
+    [self.buildable release];
+    [self.gameHUD release];
+    [self.baseAttributes release];
+    [super dealloc];
 }
 
 @end

@@ -62,9 +62,12 @@ static DataModel *sharedContext = nil;
 	return self;
 }
 
-- (void)dealloc {	
-	self.gameLayer = nil;
-	self.gestureRecognizer = nil;
+- (void)dealloc {
+    
+	[self.gameLayer release];
+    [self.gameHUDLayer release];
+    
+	[self.gestureRecognizer release];
 	
 	[self.targets release];
 	self.targets = nil;	
@@ -83,6 +86,8 @@ static DataModel *sharedContext = nil;
 
     [self.startNodes release];
 	self.startNodes = nil;
+    
+    [self.endNode release];
 
 	[super dealloc];
 }

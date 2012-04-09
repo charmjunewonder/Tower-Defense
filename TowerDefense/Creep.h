@@ -26,6 +26,8 @@
 @property (nonatomic, assign) int totalHp;
 @property (nonatomic, retain) NSMutableArray *path; // in reverse order!!!
 @property (nonatomic)BOOL isGone;
+@property (nonatomic)int rotateAddition;
+//@property (nonatomic)int scale;
 
 
 - (Creep *) initWithCreep:(Creep *) copyFrom; 

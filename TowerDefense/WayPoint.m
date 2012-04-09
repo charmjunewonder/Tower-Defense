@@ -22,4 +22,10 @@
 	return self;
 }
 
+- (void)dealloc{
+    [self.adjacentNodes release];
+    [self.fromNode release];
+    [super dealloc];
+}
+
 @end
