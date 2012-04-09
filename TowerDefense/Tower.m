@@ -9,6 +9,14 @@
 #import "Tower.h"
 #import "Projectile.h"
 
+#define greenColor ccc3(191, 224, 93)
+#define orangeColor ccc3(251, 178, 78)
+#define blueColor ccc3(73, 172, 249)
+#define redColor ccc3(255, 96, 84)
+#define yellowColor ccc3(244, 223, 91)
+#define purpleColor ccc3(73, 172, 249)
+
+
 @implementation Tower
 @synthesize experience = experience;
 @synthesize level = _level;
@@ -45,26 +53,40 @@
 		Creep *creep = (Creep *)target;
 		double curDistance = ccpDistance(self.position, creep.position);
 		
-		if (curDistance < maxDistant) {
+		if (curDistance < maxDistant && curDistance < self.range) {
 			closestCreep = creep;
 			maxDistant = curDistance;
 		}
 		
 	}
 	
-	if (maxDistant < self.range)
-		return closestCreep;
+    return closestCreep;
+}
+
+- (Creep *)getTagetThatClosestToEnd{
+    
+    Creep *closestCreep = nil;
+	double maxDistant = 99999;
 	
-	return nil;
-}
-
-- (void)checkTarget {
-    double curDistance = ccpDistance(self.position, self.target.position);
-    if (self.target.isGone || self.target.hp <= 0 || curDistance > self.range){
-        self.target = [self getClosestTarget];
+	DataModel *data = [DataModel getModel];
+	if (data.targets.count == 0) {
+        return nil;
     }
-}
+    
+	for (CCSprite *target in data.targets) {	
+		Creep *creep = (Creep *)target;
+		double curDistance = creep.path.count;
+        double targetDistanceToTower = ccpDistance(self.position, creep.position);
 
+		if (curDistance < maxDistant && targetDistanceToTower < self.range) {
+			closestCreep = creep;
+			maxDistant = curDistance;
+		}
+		
+	}
+	
+    return closestCreep;
+}
 
 @end
 
@@ -91,7 +113,7 @@
         
 		tower.target = nil;
         [tower schedule:@selector(towerLogic:) interval:1];
-        [tower schedule:@selector(checkTarget) interval:0.5];
+        //[tower schedule:@selector(checkTarget) interval:0.5];
         [tower schedule:@selector(checkExperience) interval:0.5];
     }
     return tower;
@@ -158,27 +180,25 @@
     it a position and a final destination.
 */
 - (void)finishFiring {
+    self.target = [self getTagetThatClosestToEnd];
     if (self.target) {
         DataModel *data = [DataModel getModel];
         
         self.nextProjectile = [Projectile projectile:self];
         self.nextProjectile.position = self.position;
-        
+        [self.nextProjectile setColor:greenColor];
+
         [self.parent addChild:self.nextProjectile z:1];
         [data.projectiles addObject:self.nextProjectile];
-        
-        ccTime delta = 0.2;
-        CGPoint shootVector = ccpSub(self.target.position, self.position);
-        CGPoint normalizedShootVector = ccpNormalize(shootVector);
-        CGPoint overshotVector = ccpMult(normalizedShootVector, 200);
-        CGPoint offscreenPoint = ccpAdd(self.position, overshotVector);
-        
+                
         [self.nextProjectile runAction:[CCSequence actions:
-                                        [CCMoveTo actionWithDuration:delta position:self.target.position],
+                                        [CCMoveTo actionWithDuration:0.1 position:self.target.position],
                                         [CCCallFuncN actionWithTarget:self selector:@selector(creepMoveFinished:)],
                                         nil]];
-        
-        self.nextProjectile.tag = 1;		
+        self.target.hp -= (rand()% self.damageRandom)+self.damageMin;
+        self.target.projectileTag = 1;
+        self.target.color = ccGREEN;
+        [self.target beingPoisonedForSeconds:4 damageRandom:self.damageRandom damageMin:self.damageMin];
         
         self.nextProjectile = nil;
         data = nil;
@@ -212,7 +232,6 @@
         
 		tower.target = nil;
 		[tower schedule:@selector(towerLogic:) interval:1];
-        [tower schedule:@selector(checkTarget) interval:0.5];
         [tower schedule:@selector(checkExperience) interval:0.5];
 
     }
@@ -280,28 +299,23 @@
 }
 
 - (void)finishFiring {
-	
+    self.target = [self getTagetThatClosestToEnd];
     if (self.target) {
        	DataModel *data = [DataModel getModel];
         
-        self.nextProjectile = [IceProjectile projectile:self];
+        self.nextProjectile = [Projectile projectile:self];
         self.nextProjectile.position = self.position;
-        
+        [self.nextProjectile setColor:orangeColor];
+
         [self.parent addChild:self.nextProjectile z:1];
         [data.projectiles addObject:self.nextProjectile];
         
-        ccTime delta = 0.5;
-        CGPoint shootVector = ccpSub(self.target.position, self.position);
-        CGPoint normalizedShootVector = ccpNormalize(shootVector);
-        CGPoint overshotVector = ccpMult(normalizedShootVector, 200);
-        CGPoint offscreenPoint = ccpAdd(self.position, overshotVector);
-        
         [self.nextProjectile runAction:[CCSequence actions:
-                                        [CCMoveTo actionWithDuration:delta position:offscreenPoint],
+                                        [CCMoveTo actionWithDuration:0.1 position:self.target.position],
                                         [CCCallFuncN actionWithTarget:self selector:@selector(creepMoveFinished:)],
                                         nil]];
-        
-        self.nextProjectile.tag = 2;		
+        self.target.hp -= (rand()% self.damageRandom)+self.damageMin;
+        self.target.projectileTag = 2;	
         
         self.nextProjectile = nil; 
     }
@@ -334,8 +348,6 @@
         
 		tower.target = nil;
         
-		
-        [tower schedule:@selector(checkTarget) interval:0.5];
         [tower schedule:@selector(checkExperience) interval:0.5];
 		
 		tower.target = nil;
@@ -406,30 +418,30 @@
 }
 
 - (void)finishFiring {
-	
-    if (self.target != NULL) {
+    self.target = [self getTagetThatClosestToEnd];
+    if (self.target) {
         
         DataModel *data = [DataModel getModel];
-        self.nextProjectile = [CannonProjectile projectile: self];
+        self.nextProjectile = [Projectile projectile: self];
         self.nextProjectile.position = self.position;
+        [self.nextProjectile setColor:blueColor];
         
         [self.parent addChild:self.nextProjectile z:1];
         [data.projectiles addObject:self.nextProjectile];
         
-        ccTime delta = 0.5;
-        CGPoint shootVector = ccpSub(self.target.position, self.position);
-        CGPoint normalizedShootVector = ccpNormalize(shootVector);
-        CGPoint overshotVector = ccpMult(normalizedShootVector, 320);
-        CGPoint offscreenPoint = ccpAdd(self.position, overshotVector);
-        
         [self.nextProjectile runAction:[CCSequence actions:
-                                        [CCMoveTo actionWithDuration:delta position:offscreenPoint],
+                                        [CCMoveTo actionWithDuration:0.1 position:self.target.position],
                                         [CCCallFuncN actionWithTarget:self selector:@selector(creepMoveFinished:)],
                                         nil]];
-        
-        self.nextProjectile.tag = 3;		
+        self.target.hp -= (rand()% self.damageRandom)+self.damageMin;
+        self.target.projectileTag = 3;		
+        self.target.color = blueColor;
+        [self.target beingFreezedForSeconds:1];
         
         self.nextProjectile = nil;
+    }
+    else{
+        self.target = nil; 
     }
     
 }

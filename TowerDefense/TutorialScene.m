@@ -251,7 +251,7 @@ static TutorialScene *_TutorialScene = nil;
 	DataModel *data = [DataModel getModel];
 	
 	Wave *wave = nil;
-    wave = [[Wave alloc] initWithCreep:[FastRedCreep creep] SpawnRate:1.0 RedCreeps:3 GreenCreeps:2 BrownCreeps:0];
+    wave = [[Wave alloc] initWithCreep:[FastRedCreep creep] SpawnRate:1.0 RedCreeps:5 GreenCreeps:2 BrownCreeps:0];
     [data.waves addObject:wave];
 	wave = nil;
 	wave = [[Wave alloc] initWithCreep:[FastRedCreep creep] SpawnRate:1.0 RedCreeps:5 GreenCreeps:0 BrownCreeps:0];
@@ -273,7 +273,7 @@ static TutorialScene *_TutorialScene = nil;
 
 -(void)waveWait
 {
-    [self unschedule:@selector(waveWait)];
+    //[self unschedule:@selector(waveWait)];
     [self getNextWave];
     [self.gameHUD updateWaveCount];
     [self.gameHUD newWaveApproachingEnd];
@@ -378,7 +378,7 @@ static TutorialScene *_TutorialScene = nil;
 	Creep *creep = (Creep *)sender;
 	
 	WayPoint *waypoint = [creep getNextWaypoint];
-    //creep.currentWaypoint = waypoint;
+    creep.currentWaypoint = waypoint;
     
 	id actionMove = [CCMoveTo actionWithDuration:creep.moveDuration position:waypoint.position];
 	id actionMoveDone = [CCCallFuncN actionWithTarget:self selector:@selector(FollowPath:)];
@@ -438,6 +438,25 @@ static TutorialScene *_TutorialScene = nil;
     }        
 }
 
+/*- (void)ResumePath:(id)sender {
+    Creep *creep = (Creep *)sender;
+    
+    WayPoint * currentWaypoint = creep.currentWaypoint;//startpoint
+    WayPoint * nextWaypoint = [creep getLastWaypoint];//destination
+    
+    float waypointDist = fabsf(nextWaypoint.position.x - currentWaypoint.position.x);
+    float creepDist = fabsf(nextWaypoint.position.x - creep.position.x);
+    float distFraction = creepDist / waypointDist;
+    float moveDuration = creep.moveDuration * distFraction; //Time it takes to go from one way point to another * the fraction of how far is left to go (meaning it will move at the correct speed)
+    
+    id actionMove = [CCMoveTo actionWithDuration:moveDuration position:currentWaypoint.position];   
+    id actionMoveDone = [CCCallFuncN actionWithTarget:creep selector:@selector(FollowPath:)];
+	[creep stopAllActions];
+	[creep runAction:[CCSequence actions:actionMove, actionMoveDone, nil]];
+    
+    creep.currentWaypoint = [creep getNextWaypoint];
+}*/
+
 -(void)ResumePath:(id)sender {
     Creep *creep = (Creep *)sender;
     
@@ -455,128 +474,46 @@ static TutorialScene *_TutorialScene = nil;
 	[creep runAction:[CCSequence actions:actionMove, actionMoveDone, nil]];
 }
 
+
 /*
     This logic will handle the collision detection of the current projectiles 
     flying about the screen with the creeps. The basic logic is simple: 
-    1) loop through all the projectiles, 
-    2) for each projectile, loop through all the targets present, 
-    3) determine if the bounding box for the projectile intersects the bounding box for the target, 
-    4) if they intersect then deduct health from the creep and add the projectile to a deletion array, 
     5) If the creep has 0 health then add the target to a deletion array, 
     6) remove all the objects from the projectile and creep deletion arrays. 
 */
 - (void)update:(ccTime)dt {
     
     DataModel *data = [DataModel getModel];
-	NSMutableArray *projectilesToDelete = [[NSMutableArray alloc] init];
     
-    NSMutableArray *projectiles = data.projectiles;
-	for (Projectile *projectile in projectiles) {
-		
-		CGRect projectileRect = CGRectMake(projectile.position.x - 
-                                           (projectile.contentSize.width/2), 
-										   projectile.position.y - 
-                                           (projectile.contentSize.height/2), 
-										   projectile.contentSize.width, 
-										   projectile.contentSize.height);
-        
-		NSMutableArray *targetsToDelete = [[NSMutableArray alloc] init];
-		
-		for (CCSprite *target in data.targets) {
-			CGRect targetRect = CGRectMake(target.position.x - (target.contentSize.width/2), 
-										   target.position.y - (target.contentSize.height/2), 
-										   target.contentSize.width, 
-										   target.contentSize.height);
+    NSMutableArray *targetsToDelete = [[NSMutableArray alloc] init];
+    for (Creep *target in data.targets) {
+        if (target.hp <= 0) {
+            [targetsToDelete addObject:target];
+            [self.gameHUD updateResources: rand()%(self.baseAttributes.baseMoneyDropped)];
+            [target stopAllActions];
+            [target unscheduleAllSelectors];
+            [self removeChild:target.healthBar cleanup:YES];
             
-			if (CGRectIntersectsRect(projectileRect, targetRect)) {
-                
-				[projectilesToDelete addObject:projectile];
-                Creep *creep = (Creep *)target;
-                Creep *thisCreep;
-                Tower *parentTower = (Tower *) projectile.parentTower;
-                int thisHitDamage;
-                CGRect splashRect;
-                switch (projectile.tag) {
-                    case 1:
-                        thisHitDamage = (rand()%self.baseAttributes.baseMGDamageRandom)+parentTower.damageMin;
-                        creep.hp -= thisHitDamage;
-                        
-                        parentTower.experience += thisHitDamage;
-                        break;
-                        
-                    case 2:
-                        thisHitDamage = (rand()%self.baseAttributes.baseFDamageRandom)+parentTower.damageMin;
-                        creep.hp -= thisHitDamage;
-                        parentTower.experience += thisHitDamage;
-                        
-                        id actionFreeze = [CCMoveTo actionWithDuration:parentTower.freezeDur position:creep.position];    
-                        id actionMoveResume = [CCCallFuncN actionWithTarget:self selector:@selector(ResumePath:)];  
-                        [creep stopAllActions];
-                        [creep runAction:[CCSequence actions:actionFreeze, actionMoveResume, nil]];
-                        break;
-                        
-                    case 3:
-                        thisHitDamage = (rand()%self.baseAttributes.baseFDamageRandom)+parentTower.damageMin;
-                        parentTower.experience += thisHitDamage;
-                        splashRect = CGRectMake(projectile.position.x - (parentTower.splashDist), 
-                                                projectile.position.y - (parentTower.splashDist), 
-                                                (parentTower.splashDist*2), 
-                                                (parentTower.splashDist*2));
-                        for (CCSprite *target in data.targets) {
-                            CGRect thistargetRect = CGRectMake(target.position.x - (target.contentSize.width/2), 
-                                                               target.position.y - (target.contentSize.height/2), 
-                                                               target.contentSize.width, 
-                                                               target.contentSize.height);
-                            if (CGRectIntersectsRect(splashRect, thistargetRect)) {
-                                thisCreep = (Creep *) target;
-                                thisCreep.hp -= thisHitDamage;
-                                if (thisCreep.hp <= 0) {
-                                    
-                                    [targetsToDelete addObject:target];
-                                    [self.gameHUD updateResources: rand()%(self.baseAttributes.baseMoneyDropped)];
-                                    [self removeChild:thisCreep.healthBar cleanup:YES];
-                                    
-                                }
-                            }
-                        }
-                        break;
-                    default:
-                        break;
-                }
-                
-                if (creep.hp <= 0) {
-                    
-                    [targetsToDelete addObject:target];
-                    [self.gameHUD updateResources: rand()%(self.baseAttributes.baseMoneyDropped)];
-                    [self removeChild:creep.healthBar cleanup:YES];
-                    
-                }
-                break;
-                
-			}						
-		}
+        }                                                
+    }
 		
-		for (CCSprite *target in targetsToDelete) {
-			[data.targets removeObject:target];
-			[self removeChild:target cleanup:YES];									
-		}
-		
-		[targetsToDelete release];
-	}	
-    for (CCSprite *projectile in projectilesToDelete) {
-        [data.projectiles removeObject:projectile];
-        [self removeChild:projectile cleanup:YES];
-	}
-	[projectilesToDelete release];
+	for (CCSprite *target in targetsToDelete) {
+        [data.targets removeObject:target];
+        [self removeChild:target cleanup:YES];
+        //[target release];
+    }
+    
+    [targetsToDelete release];	
+	
     
     Wave *wave = [self getCurrentWave];
     //int alivecount = [m._targets count];
-    if ([data.targets count] ==0 && wave.redCreeps <= 0 
+    if ([data.targets count] == 0 && wave.redCreeps <= 0 
         && wave.greenCreeps <= 0 && wave.brownCreeps <= 0) {
         if (self.currentLevel == 5) {
         }
         else{
-            [self schedule:@selector(waveWait) interval:3.0];
+            [self scheduleOnce:@selector(waveWait) delay:0];
             [self.gameHUD newWaveApproaching];
         }
     }

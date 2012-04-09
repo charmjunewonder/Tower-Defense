@@ -11,11 +11,14 @@
 #import "WayPoint.h"
 #import "TutorialScene.h"
 
+@class TutorialScene;
+@class GameHUD;
+
 @interface DataModel : NSObject<NSCoding>
 
 // gameLayer is a pointer to the actual game layer that all the action will take place on
-@property (nonatomic, retain) CCLayer *gameLayer;
-@property (nonatomic, retain) CCLayer *gameHUDLayer;
+@property (nonatomic, retain) TutorialScene *gameLayer;
+@property (nonatomic, retain) GameHUD *gameHUDLayer;
 @property (nonatomic, retain) NSMutableArray *projectiles;
 // “targets” are our creep enemies
 @property (nonatomic, retain) NSMutableArray *targets;

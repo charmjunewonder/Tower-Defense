@@ -229,7 +229,6 @@ static GameHUD *_sharedHUD = nil;
         
         DataModel *data = [DataModel getModel];
         CGPoint touchLocationInGameLayer = [data.gameLayer convertTouchToNodeSpace:touch];
-        
         BOOL isBuildable = [data.gameLayer canBuildOnTilePosition: touchLocationInGameLayer];
         if (isBuildable) {
             selSprite.opacity = 200;

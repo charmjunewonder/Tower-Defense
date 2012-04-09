@@ -9,10 +9,17 @@
 #import "Creep.h"
 #import "GameHUD.h"
 
+#define greenColor ccc3(191, 224, 93)
+#define orangeColor ccc3(251, 178, 78)
+#define blueColor ccc3(73, 172, 249)
+#define redColor ccc3(255, 96, 84)
+#define yellowColor ccc3(244, 223, 91)
+#define purpleColor ccc3(73, 172, 249)
 
 @implementation Creep
 
 @synthesize hp = _hp;
+@synthesize projectileTag = _projectileTag;
 @synthesize moveDuration = _moveDuration;
 @synthesize lastWaypoint = _lastWaypoint;
 @synthesize healthBar = _healthBar;
@@ -21,6 +28,9 @@
 @synthesize path = _path;
 @synthesize isGone = _isGone;
 @synthesize rotateAddition = _rotateAddition;
+@synthesize isStop = _isStop;
+@synthesize selfScale = _selfScale;
+@synthesize currentRotation = _currentRotation;
 //@synthesize scale = _scale;
 
 - (id)copyWithZone:(NSZone *)zone {
@@ -51,9 +61,8 @@ int inum = 0;
 	
 	DataModel *data = [DataModel getModel];
 	if (inum == 6) {
-        //[self stopAllActions];
-        //[self unscheduleAllSelectors];
-        //[self pauseSchedulerAndActions];
+        //[self stopMovingForSeconds:1];
+        inum = 0;
     }
     if (inum == 7) {
         //[self dealloc];
@@ -78,7 +87,7 @@ int inum = 0;
             [target unscheduleAllSelectors];
             target.isGone = YES;
             [target.path release];
-            [target release];
+            //[target release];
         }
         endtargetsToDelete = nil;
         target = nil;
@@ -127,29 +136,34 @@ int inum = 0;
         [self.path addObject:fromNode];
         fromNode = fromNode.fromNode;
     }
-    currentIndexAtPath = self.path.count;
+    currentIndexAtPath = self.path.count-1;
 }
--(void)creepLogic:(ccTime)dt {	
-	
-	// Rotate creep to face next waypoint
-	WayPoint *waypoint = [self getNextWaypoint];
-    //self.currentWaypoint = [self getNextWaypoint];
-    currentIndexAtPath--;    
+
+- (void)creepLogic:(ccTime)dt {	
+    WayPoint *waypoint = [self getNextWaypoint];
     
-	CGPoint waypointVector = ccpSub(waypoint.position, self.position);
-	CGFloat waypointAngle = ccpToAngle(waypointVector);
-	CGFloat cocosAngle = self.rotateAddition + CC_RADIANS_TO_DEGREES(-1 * waypointAngle);
+    // Rotate creep to face next waypoint
+    CGPoint waypointVector = ccpSub(waypoint.position, self.position);
+    CGFloat waypointAngle = ccpToAngle(waypointVector);
+    CGFloat cocosAngle = self.rotateAddition + CC_RADIANS_TO_DEGREES(-1 * waypointAngle);
     
-	float rotateSpeed = 0.02 / M_PI; // 1/2 second to roate 180 degrees
-	float rotateDuration = fabs(waypointAngle * rotateSpeed); 
+    float rotateSpeed = 0.02 / M_PI; // 0.02 second to roate 180 degrees
+    float rotateDuration = fabs(waypointAngle * rotateSpeed); 
     id actionRotate = [CCRotateTo actionWithDuration:rotateDuration angle:cocosAngle];
     id actionMove = [CCMoveTo actionWithDuration:self.moveDuration position:waypoint.position];
-	[self runAction:[CCSequence actions:actionRotate, actionMove, nil]];
+    [self runAction:[CCSequence actions:actionRotate, actionMove, nil]];
+    
+    // (potientially) already moved, set the current way point to 'next' one.
+    self.currentWaypoint = [self getNextWaypoint];
+    if (currentIndexAtPath > 0) {
+        [self.path removeObjectAtIndex:currentIndexAtPath];
+    }
+    currentIndexAtPath--;      
 }
 
 - (void)scalingWhenMoving{
-    id bigger = [CCScaleTo actionWithDuration:0.3 scale:0.55];
-    id smaller = [CCScaleTo actionWithDuration:0.2 scale:0.5];
+    id bigger = [CCScaleTo actionWithDuration:0.3 scale:self.selfScale*1.1];
+    id smaller = [CCScaleTo actionWithDuration:0.2 scale:self.selfScale*0.9];
     [self runAction:[CCSequence actions:bigger, smaller, nil]];
 }
 
@@ -168,6 +182,46 @@ int inum = 0;
         
     self.currentWaypoint = [data.startNodes objectAtIndex:(rand() % data.startNodes.count)];
     [self findShortestPath];
+}
+
+- (void)beingPoisonedForSeconds:(int)seconds damageRandom:(int)damageRandom damageMin:(int)damageMin{
+    //id jj = [CCActionTween actionWithDuration:2 key:@"color" from:ccGREEN to:];
+    id poisoning = [CCRepeat actionWithAction:
+                        [CCSequence actions:
+                            [CCCallBlock actionWithBlock:^{
+                                    self.hp -= (rand()% damageRandom)+damageMin;
+
+                                }], 
+                            [CCDelayTime actionWithDuration:1],nil] 
+                                    times:seconds];
+    
+    [self runAction:[CCSequence actions:poisoning, 
+                     [CCCallBlock actionWithBlock:^{
+                          self.color = ccWHITE;
+                      }],
+                     
+                      nil]];
+}
+
+- (void)beingFreezedForSeconds:(int)seconds{
+    [self stopAllActions];
+    [self unschedule:@selector(creepLogic:)];
+    [self unschedule:@selector(scalingWhenMoving)];
+    id delay = [CCDelayTime actionWithDuration: 0.1];
+    float rotateDuration = 0.1;
+    //CGFloat cocosAngle = self.rotateAddition + 20;
+
+    id rightRotate = [CCRotateBy actionWithDuration:rotateDuration angle:20];
+    id leftRotate = [CCRotateBy actionWithDuration:rotateDuration angle:-20];
+    id rotating = [CCRepeat actionWithAction:
+                    [CCSequence actions: rightRotate, leftRotate, nil] 
+                                       times:(seconds-0.1)/rotateDuration];
+    id actionMoveResume = [CCCallBlock actionWithBlock:^{
+        [self schedule:@selector(creepLogic:) interval:self.moveDuration];
+        [self schedule:@selector(scalingWhenMoving) interval:self.moveDuration];
+        self.color = ccWHITE;
+        }];
+    [self runAction:[CCSequence actions:rotating, delay, actionMoveResume, nil]];
 }
 
 - (void)dealloc{
@@ -191,9 +245,27 @@ int inum = 0;
         creep.hp = creep.totalHp = baseAttributes.baseRedCreepHealth;
         creep.moveDuration = baseAttributes.baseRedCreepMoveDur;
         creep.rotateAddition = 90;
+        creep.selfScale = 1;
         [creep randomlyChooseStartNode];
         [creep schedule:@selector(healthBarLogic:)];
         [creep schedule:@selector(creepLogic:) interval:creep.moveDuration];
+        
+        /*CCSprite *glowSprite = creep;
+        [glowSprite setColor:greenColor];
+        //[glowSprite setPosition:ccp(500, 500)];
+        [glowSprite setBlendFunc: (ccBlendFunc) { GL_ONE, GL_ONE }];
+        [glowSprite runAction: [CCRepeatForever actionWithAction:
+                                [CCSequence actions:
+                                 [CCScaleTo actionWithDuration:0.9f
+                                                        scaleX:3 
+                                                        scaleY:3], 
+                                 [CCScaleTo actionWithDuration:0.9f scaleX:3*0.75f scaleY:3*0.75f], nil] ] ];
+        [glowSprite runAction: [CCRepeatForever actionWithAction:
+                                [CCSequence actions:[CCFadeTo actionWithDuration:0.9f
+                                                                         opacity:150], 
+                                 [CCFadeTo actionWithDuration:0.9f opacity:255], nil]
+                                ] ];
+        creep = glowSprite;*/
     }
     return creep;
 }
@@ -209,12 +281,12 @@ int inum = 0;
         BaseAttributes* baseAttributes = [BaseAttributes sharedAttributes];
         creep.hp = creep.totalHp = baseAttributes.baseGreenCreepHealth;
         creep.moveDuration = baseAttributes.baseGreenCreepMoveDur;
-        creep.rotateAddition = 90;
-        creep.scale = 0.5;
+        creep.rotateAddition = creep.rotation = 90;
+        creep.scale = creep.selfScale = 0.5;
         [creep randomlyChooseStartNode];
         [creep schedule:@selector(creepLogic:) interval:creep.moveDuration];
         [creep schedule:@selector(healthBarLogic:)];
-        [creep schedule:@selector(scalingWhenMoving) interval:1];
+        [creep schedule:@selector(scalingWhenMoving) interval:creep.moveDuration];
     }
     return creep;
 }

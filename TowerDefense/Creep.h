@@ -19,6 +19,7 @@
 }
 
 @property (nonatomic, assign) int hp;
+@property (nonatomic, assign) int projectileTag;
 @property (nonatomic, assign) float moveDuration;
 @property (nonatomic, retain) WayPoint *currentWaypoint;
 @property (nonatomic, assign) int lastWaypoint;
@@ -27,6 +28,9 @@
 @property (nonatomic, retain) NSMutableArray *path; // in reverse order!!!
 @property (nonatomic)BOOL isGone;
 @property (nonatomic)int rotateAddition;
+@property (nonatomic)BOOL isStop;
+@property (nonatomic)float selfScale;
+@property (nonatomic)float currentRotation;
 //@property (nonatomic)int scale;
 
 
@@ -35,6 +39,8 @@
 - (WayPoint *)getLastWaypoint;
 - (void)randomlyChooseStartNode;
 - (void)creepLogic:(ccTime)dt;
+- (void)beingFreezedForSeconds:(int)seconds;
+- (void)beingPoisonedForSeconds:(int)seconds damageRandom:(int)damageRandom damageMin:(int)damageMin;
 @end
 
 @interface FastRedCreep : Creep {

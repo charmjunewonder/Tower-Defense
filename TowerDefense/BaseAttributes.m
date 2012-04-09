@@ -93,7 +93,7 @@ static BaseAttributes *_sharedAttributes = nil;
        _baseMGDamage = 2;//Damage (minimum)
        _baseMGDamageRandom = 5;//Random amount for extra hit points
        _baseMGFireRate = 0.25;
-       _baseMGRange = 200;
+       _baseMGRange = 100;
        _baseMGlvlup1 = 300;
        _baseMGlvlup2 = 450;
        
@@ -102,7 +102,7 @@ static BaseAttributes *_sharedAttributes = nil;
        _baseFDamageRandom = 5;//Random amount for extra hit points
        _baseFFireRate = 6.0;
        _baseFFreezeDur = 1.5;
-       _baseFRange = 150;
+       _baseFRange = 100;
        _baseFlvlup1 = 50;
        _baseFlvlup2 = 75;
        
@@ -116,7 +116,7 @@ static BaseAttributes *_sharedAttributes = nil;
        _baseClvlup2 = 750;
         
        _baseRedCreepHealth = 100;
-       _baseRedCreepMoveDur = 0.1;
+       _baseRedCreepMoveDur = 0.3;
        _baseGreenCreepHealth = 150;
        _baseGreenCreepMoveDur = 1.5;
        _baseBrownCreepHealth = 500;

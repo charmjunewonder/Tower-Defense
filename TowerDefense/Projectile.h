@@ -17,17 +17,3 @@
 + (id)projectile: (id) sender;
 
 @end
-
-@interface IceProjectile : Projectile {
-    
-}
-
-+ (id)projectile: (id) sender;
-
-@end
-
-@interface CannonProjectile : Projectile {
-}
-+ (id)projectile: (id) sender;
-
-@end

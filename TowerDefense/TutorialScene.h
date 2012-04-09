@@ -13,6 +13,7 @@
 #import "Wave.h"
 #import "GameHUD.h"
 #import "BaseAttributes.h"
+@class  Creep;
 
 @interface TutorialScene : CCLayer
 
@@ -27,6 +28,7 @@
 + (id)getTutorialScene;
 - (void)addWaypoint;
 - (void)addWaves;
+//- (void)ResumePath: (Creep *)sender;
 - (void)addTower: (CGPoint)position tag: (int)towerTag;
 - (BOOL)canBuildOnTilePosition:(CGPoint) position;
 
