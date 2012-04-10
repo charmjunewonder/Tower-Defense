@@ -12,6 +12,8 @@
 
 @interface MagicBuilding : CCSprite {
 }
+@property (nonatomic) CGPoint tileLocation;
+@property (nonatomic) BOOL isOccupied;
 @end
 
 @interface Tower : MagicBuilding 

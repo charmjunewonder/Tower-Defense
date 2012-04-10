@@ -9,6 +9,9 @@
 #import "TutorialScene.h"
 #import "DataModel.h"
 #import "Tower.h"
+#import "Creep.h"
+#import "Wave.h"
+#import "MagicStone.h"
 #import "Projectile.h"
 
 #define tileMapWidth 20
@@ -277,7 +280,34 @@ static TutorialScene *_TutorialScene = nil;
 	wave = nil;
 }
 
--(void)waveWait
+- (void)addMagicStone:(CGPoint)position stoneTag:(int)tag{
+    DataModel *data = [DataModel getModel];
+    CGPoint stoneLocation = [self tileCoordForPosition:position];
+    
+    Tower *specificTower = nil;
+    for(specificTower in data.towers){ // find that waypoint
+        if (__CGPointEqualToPoint(specificTower.tileLocation, position)) {
+            break;
+        }
+    }
+    if (!specificTower.isOccupied) {
+        MagicStone *stone = nil;
+        switch (tag) {
+            case 1:
+                stone = [PoisonousStone stone];
+                break;
+            case 3:
+                stone = [ShockingStone stone];
+            default:
+                break;
+        }
+        stone.position = ccp((stoneLocation.x * 32)+16, 
+                            (self.tileMap.contentSize.height - (stoneLocation.y * 32))-16);
+        [self addChild:stone z:1];
+    }
+}
+
+- (void)waveWait
 {
     //[self unschedule:@selector(waveWait)];
     [self getNextWave];
@@ -332,12 +362,7 @@ static TutorialScene *_TutorialScene = nil;
             return YES;
         }
         else if([type isEqualToString:@"2"] && occupied == NO){
-            WayPoint *specificPoint = nil;
-            for(specificPoint in data.waypoints){ // find that waypoint
-                if (__CGPointEqualToPoint(specificPoint.tileLocation, towerLocation)) {
-                    break;
-                }
-            }
+            WayPoint *specificPoint = [self findWayPointWithTilePosition:towerLocation];
             if (!specificPoint) 
                 return NO;
             if (specificPoint.isOccupied)
@@ -391,11 +416,24 @@ static TutorialScene *_TutorialScene = nil;
 	return NO;
 }
 
--(void)reproduceShortestPathForAllTarget{
+- (void)reproduceShortestPathForAllTarget{
     DataModel *data = [DataModel getModel];
     for(Creep *creep in data.targets){
         [creep findShortestPath];
     }
+}
+
+- (WayPoint *)findWayPointWithTilePosition:(CGPoint)position{
+    NSAssert(position.x < tileMapWidth && position.y < tileMapHeight, 
+             @"you should pass tile position, not the position on the screen.");
+    WayPoint *specificPoint = nil;
+    DataModel *data = [DataModel getModel];
+    for(specificPoint in data.waypoints){ // find that waypoint
+        if (__CGPointEqualToPoint(specificPoint.tileLocation, position)) {
+            break;
+        }
+    }
+    return specificPoint;
 }
 
 - (void)addTower: (CGPoint)position{
@@ -408,12 +446,7 @@ static TutorialScene *_TutorialScene = nil;
         NSDictionary *properties = [self.tileMap propertiesForGID:tileGid];
         NSString *type = [properties valueForKey:@"Buildable"];
         if([type isEqualToString:@"2"]){
-            WayPoint *specificPoint = nil;
-            for(specificPoint in data.waypoints){ // find that waypoint
-                if (__CGPointEqualToPoint(specificPoint.tileLocation, towerLocation)) {
-                    break;
-                }
-            }
+            WayPoint *specificPoint = [self findWayPointWithTilePosition:towerLocation];
             [data.waypoints removeObject:specificPoint];
             [self reproduceShortestPathForAllTarget];
 
@@ -421,23 +454,11 @@ static TutorialScene *_TutorialScene = nil;
 
         tower = [Tower tower];
 		tower.position = ccp((towerLocation.x * 32)+16, (self.tileMap.contentSize.height - (towerLocation.y * 32))-16);
+        tower.tileLocation = towerLocation;
         [self addChild:tower z:1];
         tower.tag = 1;
         [data.towers addObject:tower];
     }
-}
-
--(void)FollowPath:(id)sender {
-    
-	Creep *creep = (Creep *)sender;
-	
-	WayPoint *waypoint = [creep getNextWaypoint];
-    creep.currentWaypoint = waypoint;
-    
-	id actionMove = [CCMoveTo actionWithDuration:creep.moveDuration position:waypoint.position];
-	id actionMoveDone = [CCCallFuncN actionWithTarget:self selector:@selector(FollowPath:)];
-	[creep stopAllActions];
-	[creep runAction:[CCSequence actions:actionMove, actionMoveDone, nil]];
 }
 
 -(void)gameLogic:(ccTime)dt {
@@ -490,42 +511,6 @@ static TutorialScene *_TutorialScene = nil;
 		[self runAction:[CCEaseOut actionWithAction:moveTo rate:1]];            
         
     }        
-}
-
-/*- (void)ResumePath:(id)sender {
-    Creep *creep = (Creep *)sender;
-    
-    WayPoint * currentWaypoint = creep.currentWaypoint;//startpoint
-    WayPoint * nextWaypoint = [creep getLastWaypoint];//destination
-    
-    float waypointDist = fabsf(nextWaypoint.position.x - currentWaypoint.position.x);
-    float creepDist = fabsf(nextWaypoint.position.x - creep.position.x);
-    float distFraction = creepDist / waypointDist;
-    float moveDuration = creep.moveDuration * distFraction; //Time it takes to go from one way point to another * the fraction of how far is left to go (meaning it will move at the correct speed)
-    
-    id actionMove = [CCMoveTo actionWithDuration:moveDuration position:currentWaypoint.position];   
-    id actionMoveDone = [CCCallFuncN actionWithTarget:creep selector:@selector(FollowPath:)];
-	[creep stopAllActions];
-	[creep runAction:[CCSequence actions:actionMove, actionMoveDone, nil]];
-    
-    creep.currentWaypoint = [creep getNextWaypoint];
-}*/
-
--(void)ResumePath:(id)sender {
-    Creep *creep = (Creep *)sender;
-    
-    WayPoint * cWaypoint = creep.currentWaypoint;//destination
-    WayPoint * lWaypoint = [creep getLastWaypoint];//startpoint
-    
-    float waypointDist = fabsf(cWaypoint.position.x - lWaypoint.position.x);
-    float creepDist = fabsf(cWaypoint.position.x - creep.position.x);
-    float distFraction = creepDist / waypointDist;
-    float moveDuration = creep.moveDuration * distFraction; //Time it takes to go from one way point to another * the fraction of how far is left to go (meaning it will move at the correct speed)
-    
-    id actionMove = [CCMoveTo actionWithDuration:moveDuration position:cWaypoint.position];   
-    id actionMoveDone = [CCCallFuncN actionWithTarget:self selector:@selector(FollowPath:)];
-	[creep stopAllActions];
-	[creep runAction:[CCSequence actions:actionMove, actionMoveDone, nil]];
 }
 
 

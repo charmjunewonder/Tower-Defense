@@ -8,9 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "cocos2d.h"
-#import "Creep.h"
 #import "WayPoint.h"
-#import "Wave.h"
 #import "GameHUD.h"
 #import "BaseAttributes.h"
 @class  Creep;
@@ -28,8 +26,9 @@
 + (id)getTutorialScene;
 - (void)addWaypoint;
 - (void)addWaves;
-//- (void)ResumePath: (Creep *)sender;
+- (WayPoint *)findWayPointWithTilePosition:(CGPoint)position;
 - (void)addTower: (CGPoint)position;
 - (BOOL)canBuildOnTilePosition:(CGPoint) position;
 - (CGPoint)tileCoordForPosition:(CGPoint) position;
+- (void)addMagicStone:(CGPoint)position stoneTag:(int)tag;
 @end

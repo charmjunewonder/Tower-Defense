@@ -133,6 +133,8 @@
 		D199E1CA152DDF0E00C6B739 /* BaseAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = D199E1C9152DDF0E00C6B739 /* BaseAttributes.m */; };
 		D19C445D1533D33600728D8C /* MagicStone.m in Sources */ = {isa = PBXBuildFile; fileRef = D19C445C1533D33600728D8C /* MagicStone.m */; };
 		D19C44601533ED1F00728D8C /* tower.png in Resources */ = {isa = PBXBuildFile; fileRef = D19C445F1533ED1F00728D8C /* tower.png */; };
+		D19C446215343C3D00728D8C /* build tower.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D19C446115343C3D00728D8C /* build tower.jpg */; };
+		D19C446415343CC100728D8C /* build tower selected.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D19C446315343CC100728D8C /* build tower selected.jpg */; };
 		D1A0C1621530567D00393827 /* Buy.png in Resources */ = {isa = PBXBuildFile; fileRef = D1A0C1591530567D00393827 /* Buy.png */; };
 		D1A0C1631530567D00393827 /* Cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = D1A0C15A1530567D00393827 /* Cancel.png */; };
 		D1A0C1651530567D00393827 /* CannonTurret.png in Resources */ = {isa = PBXBuildFile; fileRef = D1A0C15C1530567D00393827 /* CannonTurret.png */; };
@@ -416,6 +418,8 @@
 		D19C445B1533D33600728D8C /* MagicStone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicStone.h; sourceTree = "<group>"; };
 		D19C445C1533D33600728D8C /* MagicStone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MagicStone.m; sourceTree = "<group>"; };
 		D19C445F1533ED1F00728D8C /* tower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tower.png; path = Resources/tower.png; sourceTree = "<group>"; };
+		D19C446115343C3D00728D8C /* build tower.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "build tower.jpg"; path = "Resources/build tower.jpg"; sourceTree = "<group>"; };
+		D19C446315343CC100728D8C /* build tower selected.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "build tower selected.jpg"; path = "Resources/build tower selected.jpg"; sourceTree = "<group>"; };
 		D1A0C1591530567D00393827 /* Buy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Buy.png; path = Resources/Buy.png; sourceTree = "<group>"; };
 		D1A0C15A1530567D00393827 /* Cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Cancel.png; path = Resources/Cancel.png; sourceTree = "<group>"; };
 		D1A0C15C1530567D00393827 /* CannonTurret.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CannonTurret.png; path = Resources/CannonTurret.png; sourceTree = "<group>"; };
@@ -537,6 +541,8 @@
 		D14039F7152B53AF003C92DE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D19C446115343C3D00728D8C /* build tower.jpg */,
+				D19C446315343CC100728D8C /* build tower selected.jpg */,
 				D11C849015317238002B9921 /* gem 1.png */,
 				D11C849115317238002B9921 /* gem 2.png */,
 				D11C849215317238002B9921 /* gem 3.jpg */,
@@ -980,6 +986,8 @@
 				D1A5349E1531E8F5004B4D0D /* image 1797.png in Resources */,
 				D14CD0A81532B6F500116B72 /* projectile.png in Resources */,
 				D19C44601533ED1F00728D8C /* tower.png in Resources */,
+				D19C446215343C3D00728D8C /* build tower.jpg in Resources */,
+				D19C446415343CC100728D8C /* build tower selected.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

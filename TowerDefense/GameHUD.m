@@ -49,7 +49,7 @@ static GameHUD *_sharedHUD = nil;
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default];
         
         movableSprites = [[NSMutableArray alloc] init];
-        NSArray *images = [NSArray arrayWithObjects:@"gem 1.png", @"gem 2.png", @"gem 3.jpg", nil]; 
+        NSArray *images = [NSArray arrayWithObjects:@"build tower.jpg", @"gem 1.png", @"gem 2.png", @"gem 3.jpg", nil]; 
         for (int i = 0; i < images.count; ++i) {
             NSString *image = [images objectAtIndex:i];
             CCSprite *sprite = [CCSprite spriteWithFile:image];
@@ -174,15 +174,20 @@ static GameHUD *_sharedHUD = nil;
                 data.gestureRecognizer.enabled = NO;
                 
                 selSpriteRange = [CCSprite spriteWithFile:@"Range.png"];
-                
+                CCTexture2D* tex = nil;
+
                 switch (sprite.tag) {
                     case 1:
-                        selSpriteRange.scale = (baseAttributes.baseMGRange/50);
+                        tex = [[CCTextureCache sharedTextureCache] addImage:@"build tower selected.jpg"];
+                        [sprite setTexture: tex];
                         break;
                     case 2:
+                        selSpriteRange.scale = (baseAttributes.baseMGRange/50);
+                        break;
+                    case 3:
                         selSpriteRange.scale = (baseAttributes.baseFRange/50);
                         break; 
-                    case 3:
+                    case 4:
                         selSpriteRange.scale = (baseAttributes.baseCRange/50);
                         break;
                     default:
@@ -259,7 +264,23 @@ static GameHUD *_sharedHUD = nil;
 		
 		if (!CGRectContainsPoint(backgroundRect, touchLocation)) {
 			CGPoint touchLocationInGameLayer = [data.gameLayer convertTouchToNodeSpace:touch];
-            [data.gameLayer addTower: touchLocationInGameLayer];
+            switch (selSprite.tag) {
+                case 1:
+                    [data.gameLayer addTower: touchLocationInGameLayer];
+                    break;
+                case 2:
+                    [data.gameLayer addMagicStone:touchLocationInGameLayer stoneTag:1];
+                    break;
+                case 3:
+                    [data.gameLayer addMagicStone:touchLocationInGameLayer stoneTag:2];
+                    break; 
+                case 4:
+                    [data.gameLayer addMagicStone:touchLocationInGameLayer stoneTag:3];
+                    break;
+                default:
+                    break;
+            }
+
 		}
 		
 		[self removeChild:selSprite cleanup:YES];

@@ -10,6 +10,8 @@
 #import "Projectile.h"
 
 @implementation MagicBuilding
+@synthesize tileLocation = _tileLocation;
+@synthesize isOccupied = _isOccupied;
 @end
 
 @implementation Tower

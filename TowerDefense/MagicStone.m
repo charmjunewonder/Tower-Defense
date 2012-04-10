@@ -152,9 +152,9 @@
         stone.poisoningDuration = 5;
         
 		stone.target = nil;
-        [stone schedule:@selector(stoneLogic:) interval:1];
+        //[stone schedule:@selector(stoneLogic:) interval:1];
         //[stone schedule:@selector(checkTarget) interval:0.5];
-        [stone schedule:@selector(checkExperience) interval:0.5];
+        //[stone schedule:@selector(checkExperience) interval:0.5];
     }
     return stone;
 
@@ -183,8 +183,8 @@
         stone.level = 1;
         
 		stone.target = nil;
-		[stone schedule:@selector(stoneLogic:) interval:1];
-        [stone schedule:@selector(checkExperience) interval:0.5];
+		//[stone schedule:@selector(stoneLogic:) interval:1];
+        //[stone schedule:@selector(checkExperience) interval:0.5];
     }
 	
     return stone;
@@ -210,14 +210,14 @@
         stone.damageRandom = baseAttributes.baseCDamageRandom;
         stone.range = baseAttributes.baseMGRange;
         stone.projectileTag = 3;
-        [stone schedule:@selector(stoneLogic:) interval:baseAttributes.baseCFireRate];
         stone.shockingDuration = 0;
         
         stone.level = 1;
 		stone.target = nil;
         
-        [stone schedule:@selector(checkExperience) interval:0.5];
-		
+        //[stone schedule:@selector(checkExperience) interval:0.5];
+        //[stone schedule:@selector(stoneLogic:) interval:baseAttributes.baseCFireRate];
+
 		stone.target = nil;
 		[stone schedule:@selector(stoneLogic:) interval:2];
 		
