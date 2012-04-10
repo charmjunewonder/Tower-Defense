@@ -20,8 +20,7 @@
 @property (nonatomic) int redCreeps;
 @property (nonatomic) int greenCreeps;
 @property (nonatomic) int brownCreeps;
-@property (nonatomic, copy)Creep *creepType;
 
-- (id)initWithCreep:(Creep *)creep SpawnRate:(float)spawnrate RedCreeps:(int)redcreeps GreenCreeps: (int)greencreeps BrownCreeps: (int)browncreeps;
+- (id)initWithSpawnRate:(float)spawnrate RedCreeps:(int)redcreeps GreenCreeps: (int)greencreeps BrownCreeps: (int)browncreeps;
 
 @end

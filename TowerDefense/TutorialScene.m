@@ -11,6 +11,9 @@
 #import "Tower.h"
 #import "Projectile.h"
 
+#define tileMapWidth 20
+#define tileMapHeight 17
+
 @implementation TutorialScene
 
 @synthesize tileMap = _tileMap;
@@ -126,6 +129,7 @@ static TutorialScene *_TutorialScene = nil;
 
     wp = [[WayPoint alloc] init];
     wp.position = ccp(x, y);
+    wp.tileLocation = [self tileCoordForPosition: wp.position];
     [data.waypoints addObject:wp];
     data.endNode = wp;
     
@@ -138,6 +142,7 @@ static TutorialScene *_TutorialScene = nil;
         
         wp = [[WayPoint alloc] init];
         wp.position = ccp(x, y);
+        wp.tileLocation = [self tileCoordForPosition: wp.position];
         [data.startNodes addObject:wp];
         [data.waypoints addObject:wp];
     }
@@ -163,6 +168,7 @@ static TutorialScene *_TutorialScene = nil;
             }
         }
         
+        wp.tileLocation = [self tileCoordForPosition: wp.position];
 		[data.waypoints addObject:wp];
         
     }
@@ -251,22 +257,22 @@ static TutorialScene *_TutorialScene = nil;
 	DataModel *data = [DataModel getModel];
 	
 	Wave *wave = nil;
-    wave = [[Wave alloc] initWithCreep:[FastRedCreep creep] SpawnRate:1.0 RedCreeps:5 GreenCreeps:2 BrownCreeps:0];
+    wave = [[Wave alloc] initWithSpawnRate:1.0 RedCreeps:1 GreenCreeps:0 BrownCreeps:0];
     [data.waves addObject:wave];
 	wave = nil;
-	wave = [[Wave alloc] initWithCreep:[FastRedCreep creep] SpawnRate:1.0 RedCreeps:5 GreenCreeps:0 BrownCreeps:0];
+	wave = [[Wave alloc] initWithSpawnRate:1.0 RedCreeps:5 GreenCreeps:0 BrownCreeps:0];
     [data.waves addObject:wave];
 	wave = nil;
-	wave = [[Wave alloc] initWithCreep:[FastRedCreep creep] SpawnRate:1.0 RedCreeps:5 GreenCreeps:5 BrownCreeps:0];
+	wave = [[Wave alloc] initWithSpawnRate:1.0 RedCreeps:5 GreenCreeps:5 BrownCreeps:0];
     [data.waves addObject:wave];
 	wave = nil;	
-    wave = [[Wave alloc] initWithCreep:[FastRedCreep creep] SpawnRate:0.8 RedCreeps:7 GreenCreeps:8 BrownCreeps:0];
+    wave = [[Wave alloc] initWithSpawnRate:0.8 RedCreeps:7 GreenCreeps:8 BrownCreeps:0];
     [data.waves addObject:wave];
 	wave = nil;
-	wave = [[Wave alloc] initWithCreep:[FastRedCreep creep] SpawnRate:1.2 RedCreeps:7 GreenCreeps:14 BrownCreeps:0];
+	wave = [[Wave alloc] initWithSpawnRate:1.2 RedCreeps:7 GreenCreeps:14 BrownCreeps:0];
     [data.waves addObject:wave];
     wave = nil;
-    wave = [[Wave alloc] initWithCreep:[FastRedCreep creep] SpawnRate:1.5 RedCreeps:5 GreenCreeps:5 BrownCreeps:2];
+    wave = [[Wave alloc] initWithSpawnRate:1.5 RedCreeps:5 GreenCreeps:5 BrownCreeps:2];
     [data.waves addObject:wave];
 	wave = nil;
 }
@@ -298,19 +304,17 @@ static TutorialScene *_TutorialScene = nil;
 */
 - (BOOL) canBuildOnTilePosition:(CGPoint) position 
 {
-    /*CGRect gameLayerRect = CGRectMake(self.position.x,
-                                      self.position.y,
-                                      self.contentSize.width,
-                                      self.contentSize.height);*/
     CGRect buildableLayerRect = CGRectMake(self.buildable.position.x,
                                       self.buildable.position.y,
                                       self.buildable.contentSize.width,
                                       self.buildable.contentSize.height);
 
     if (CGRectContainsPoint(buildableLayerRect, position)){
+        
         CGPoint towerLocation = [self tileCoordForPosition: position];
-        if (towerLocation.x >= 20 || towerLocation.y >= 17 || towerLocation.x  < 0 || towerLocation.y < 0)
-            return false; // safe bound check 
+        if (towerLocation.x >= tileMapWidth || towerLocation.y >= tileMapHeight || towerLocation.x  < 0 || towerLocation.y < 0)
+            return NO; // safe bound check, ensure the app don't crash.
+        
         int tileGid = [self.buildable tileGIDAt:towerLocation];
         NSDictionary *properties = [self.tileMap propertiesForGID:tileGid];
         NSString *type = [properties valueForKey:@"Buildable"];
@@ -327,45 +331,95 @@ static TutorialScene *_TutorialScene = nil;
         if([type isEqualToString: @"1"] && occupied == NO) {
             return YES;
         }
+        else if([type isEqualToString:@"2"] && occupied == NO){
+            WayPoint *specificPoint = nil;
+            for(specificPoint in data.waypoints){ // find that waypoint
+                if (__CGPointEqualToPoint(specificPoint.tileLocation, towerLocation)) {
+                    break;
+                }
+            }
+            if (!specificPoint) 
+                return NO;
+            if (specificPoint.isOccupied)
+                return NO;
+            
+            NSMutableArray *fakeQueue = [NSMutableArray arrayWithCapacity:50];
+            for(WayPoint* startPoint in data.startNodes){
+                [fakeQueue addObject:startPoint];
+                
+                for (WayPoint *point in data.waypoints){
+                    point.isVisited = NO;
+                    point.fromNode = NULL;
+                }
+                specificPoint.isVisited = YES;
+                int currentQueueObjectIndex = 0;
+                int totalQueueObjectNum = 0;
+                startPoint.isVisited = YES;
+
+                WayPoint *queueObject = nil;
+                totalQueueObjectNum++;
+                while (fakeQueue.count != 0) {
+                    queueObject = [fakeQueue objectAtIndex:0];
+                    //NSMutableArray *array = queueObject.adjacentNodes;
+                    for (WayPoint *adjacentPoint in queueObject.adjacentNodes){
+                        if (!adjacentPoint.isVisited) {
+                            [fakeQueue addObject:adjacentPoint];
+                            totalQueueObjectNum++;
+                            adjacentPoint.fromNode = queueObject;
+                            adjacentPoint.isVisited = YES;
+                        }
+                    }
+                    [fakeQueue removeObject:queueObject];
+                    ++currentQueueObjectIndex;
+                }
+
+                WayPoint *fromNode = data.endNode;
+                while (fromNode.fromNode) { // get the first node
+                    fromNode = fromNode.fromNode;
+                }
+                if(fromNode != startPoint){
+                    //[fakeQueue release];
+                    return NO;
+                }
+                [fakeQueue removeAllObjects];
+            }
+            
+            //[fakeQueue release];
+            return YES;
+        }
     }
 	return NO;
 }
 
-- (void)addTower: (CGPoint)position tag: (int)towerTag{
+-(void)reproduceShortestPathForAllTarget{
+    DataModel *data = [DataModel getModel];
+    for(Creep *creep in data.targets){
+        [creep findShortestPath];
+    }
+}
+
+- (void)addTower: (CGPoint)position{
     DataModel *data = [DataModel getModel];
     Tower *tower = nil;
     CGPoint towerLocation = [self tileCoordForPosition:position];
 
     if ([self canBuildOnTilePosition:position]) {
-        switch (towerTag) {
-            case 1:
-                if (self.gameHUD.resources >= (int)(self.baseAttributes.baseMGCost * self.baseAttributes.baseTowerCostPercentage)) {
-                    tower = [MachineGunTower tower];
-                    [self.gameHUD updateResources:-(int)(self.baseAttributes.baseMGCost*self.baseAttributes.baseTowerCostPercentage)];
+        int tileGid = [self.buildable tileGIDAt:towerLocation];
+        NSDictionary *properties = [self.tileMap propertiesForGID:tileGid];
+        NSString *type = [properties valueForKey:@"Buildable"];
+        if([type isEqualToString:@"2"]){
+            WayPoint *specificPoint = nil;
+            for(specificPoint in data.waypoints){ // find that waypoint
+                if (__CGPointEqualToPoint(specificPoint.tileLocation, towerLocation)) {
+                    break;
                 }
-                else
-                    return;
-                break;
-            case 2:
-                if (self.gameHUD.resources >= (int)(self.baseAttributes.baseFCost*self.baseAttributes.baseTowerCostPercentage)) {
-                    tower = [FreezeTower tower];
-                    [self.gameHUD updateResources:-(int)(self.baseAttributes.baseFCost*self.baseAttributes.baseTowerCostPercentage)];
-                }
-                else
-                    return;
-                break;
-            case 3:
-                if (self.gameHUD.resources >= (int)(self.baseAttributes.baseCCost*self.baseAttributes.baseTowerCostPercentage)) {
-                    tower = [CannonTower tower]; //To change later
-                    [self.gameHUD updateResources:-(int)(self.baseAttributes.baseCCost*self.baseAttributes.baseTowerCostPercentage)];
-                }
-                else
-                    return;
-                break;
-            default:
-                break;
+            }
+            [data.waypoints removeObject:specificPoint];
+            [self reproduceShortestPathForAllTarget];
+
         }
-        //int yy = self.tileMap.contentSize.height - (towerLocation.y * 32);
+
+        tower = [Tower tower];
 		tower.position = ccp((towerLocation.x * 32)+16, (self.tileMap.contentSize.height - (towerLocation.y * 32))-16);
         [self addChild:tower z:1];
         tower.tag = 1;

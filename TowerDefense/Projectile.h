@@ -12,7 +12,7 @@
 @interface Projectile : CCSprite {
     
 }
-@property (nonatomic, assign) CCSprite *parentTower;
+@property (nonatomic, assign) CCSprite *parentStone;
 
 + (id)projectile: (id) sender;
 

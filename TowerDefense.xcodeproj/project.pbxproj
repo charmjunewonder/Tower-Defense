@@ -131,6 +131,8 @@
 		D1403B6A152B56B1003C92DE /* Wave.m in Sources */ = {isa = PBXBuildFile; fileRef = D1403B69152B56B1003C92DE /* Wave.m */; };
 		D14CD0A81532B6F500116B72 /* projectile.png in Resources */ = {isa = PBXBuildFile; fileRef = D14CD0A71532B6F500116B72 /* projectile.png */; };
 		D199E1CA152DDF0E00C6B739 /* BaseAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = D199E1C9152DDF0E00C6B739 /* BaseAttributes.m */; };
+		D19C445D1533D33600728D8C /* MagicStone.m in Sources */ = {isa = PBXBuildFile; fileRef = D19C445C1533D33600728D8C /* MagicStone.m */; };
+		D19C44601533ED1F00728D8C /* tower.png in Resources */ = {isa = PBXBuildFile; fileRef = D19C445F1533ED1F00728D8C /* tower.png */; };
 		D1A0C1621530567D00393827 /* Buy.png in Resources */ = {isa = PBXBuildFile; fileRef = D1A0C1591530567D00393827 /* Buy.png */; };
 		D1A0C1631530567D00393827 /* Cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = D1A0C15A1530567D00393827 /* Cancel.png */; };
 		D1A0C1651530567D00393827 /* CannonTurret.png in Resources */ = {isa = PBXBuildFile; fileRef = D1A0C15C1530567D00393827 /* CannonTurret.png */; };
@@ -411,6 +413,9 @@
 		D14CD0A71532B6F500116B72 /* projectile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = projectile.png; path = Resources/projectile.png; sourceTree = "<group>"; };
 		D199E1C8152DDF0E00C6B739 /* BaseAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseAttributes.h; sourceTree = "<group>"; };
 		D199E1C9152DDF0E00C6B739 /* BaseAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseAttributes.m; sourceTree = "<group>"; };
+		D19C445B1533D33600728D8C /* MagicStone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicStone.h; sourceTree = "<group>"; };
+		D19C445C1533D33600728D8C /* MagicStone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MagicStone.m; sourceTree = "<group>"; };
+		D19C445F1533ED1F00728D8C /* tower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tower.png; path = Resources/tower.png; sourceTree = "<group>"; };
 		D1A0C1591530567D00393827 /* Buy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Buy.png; path = Resources/Buy.png; sourceTree = "<group>"; };
 		D1A0C15A1530567D00393827 /* Cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Cancel.png; path = Resources/Cancel.png; sourceTree = "<group>"; };
 		D1A0C15C1530567D00393827 /* CannonTurret.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CannonTurret.png; path = Resources/CannonTurret.png; sourceTree = "<group>"; };
@@ -516,6 +521,8 @@
 				D1403B61152B540A003C92DE /* TutorialScene.m */,
 				D1D8C6E4152C389000457795 /* Tower.h */,
 				D1D8C6E5152C389000457795 /* Tower.m */,
+				D19C445B1533D33600728D8C /* MagicStone.h */,
+				D19C445C1533D33600728D8C /* MagicStone.m */,
 				D1403B68152B56B1003C92DE /* Wave.h */,
 				D1403B69152B56B1003C92DE /* Wave.m */,
 				D1403B62152B540A003C92DE /* WayPoint.h */,
@@ -534,6 +541,7 @@
 				D11C849115317238002B9921 /* gem 2.png */,
 				D11C849215317238002B9921 /* gem 3.jpg */,
 				D1A5349D1531E8F5004B4D0D /* image 1797.png */,
+				D19C445F1533ED1F00728D8C /* tower.png */,
 				D14CD0A71532B6F500116B72 /* projectile.png */,
 				D14039FA152B53AF003C92DE /* fps_images.png */,
 				D1A0C18B15307E6600393827 /* ishot-36.png */,
@@ -971,6 +979,7 @@
 				D1A5349A1531D7D7004B4D0D /* cockroach.png in Resources */,
 				D1A5349E1531E8F5004B4D0D /* image 1797.png in Resources */,
 				D14CD0A81532B6F500116B72 /* projectile.png in Resources */,
+				D19C44601533ED1F00728D8C /* tower.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1088,6 +1097,7 @@
 				D1D8C6EE152C3EDB00457795 /* GameHUD.m in Sources */,
 				D1ECA7DE152C78C300D04093 /* Projectile.m in Sources */,
 				D199E1CA152DDF0E00C6B739 /* BaseAttributes.m in Sources */,
+				D19C445D1533D33600728D8C /* MagicStone.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

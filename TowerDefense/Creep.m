@@ -103,6 +103,7 @@ int inum = 0;
 
 - (void)findShortestPath{
     NSMutableArray *fakeQueue = [NSMutableArray arrayWithCapacity:50];
+    if(!self.currentWaypoint) return;
     [fakeQueue addObject:self.currentWaypoint];
     
     DataModel *data = [DataModel getModel];
@@ -132,6 +133,7 @@ int inum = 0;
     }
     
     WayPoint *fromNode = data.endNode;
+    [self.path removeAllObjects];
     while (fromNode) {
         [self.path addObject:fromNode];
         fromNode = fromNode.fromNode;
@@ -154,7 +156,9 @@ int inum = 0;
     [self runAction:[CCSequence actions:actionRotate, actionMove, nil]];
     
     // (potientially) already moved, set the current way point to 'next' one.
+    self.currentWaypoint.isOccupied = NO;
     self.currentWaypoint = [self getNextWaypoint];
+    self.currentWaypoint.isOccupied = YES;
     if (currentIndexAtPath > 0) {
         [self.path removeObjectAtIndex:currentIndexAtPath];
     }
@@ -184,13 +188,12 @@ int inum = 0;
     [self findShortestPath];
 }
 
-- (void)beingPoisonedForSeconds:(int)seconds damageRandom:(int)damageRandom damageMin:(int)damageMin{
+- (void)beingPoisonedForSeconds:(int)seconds poinsonousDamage:(int)damage{    
     //id jj = [CCActionTween actionWithDuration:2 key:@"color" from:ccGREEN to:];
     id poisoning = [CCRepeat actionWithAction:
                         [CCSequence actions:
                             [CCCallBlock actionWithBlock:^{
-                                    self.hp -= (rand()% damageRandom)+damageMin;
-
+                                    self.hp -= damage;
                                 }], 
                             [CCDelayTime actionWithDuration:1],nil] 
                                     times:seconds];
@@ -203,7 +206,7 @@ int inum = 0;
                       nil]];
 }
 
-- (void)beingFreezedForSeconds:(int)seconds{
+- (void)beingShockingForSeconds:(int)seconds{
     [self stopAllActions];
     [self unschedule:@selector(creepLogic:)];
     [self unschedule:@selector(scalingWhenMoving)];

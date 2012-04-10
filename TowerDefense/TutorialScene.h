@@ -29,7 +29,7 @@
 - (void)addWaypoint;
 - (void)addWaves;
 //- (void)ResumePath: (Creep *)sender;
-- (void)addTower: (CGPoint)position tag: (int)towerTag;
+- (void)addTower: (CGPoint)position;
 - (BOOL)canBuildOnTilePosition:(CGPoint) position;
-
+- (CGPoint)tileCoordForPosition:(CGPoint) position;
 @end

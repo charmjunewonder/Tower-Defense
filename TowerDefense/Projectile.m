@@ -17,13 +17,13 @@
 
 
 @implementation Projectile
-@synthesize parentTower = _parentTower;
+@synthesize parentStone = _parentStone;
 + (id)projectile: (id) sender{
 	
     Projectile *projectile = nil;
     if ((projectile = [[[super alloc] initWithFile:@"projectile.png"] autorelease])){
         [projectile setColor:greenColor];
-        projectile.parentTower = sender;
+        projectile.parentStone = sender;
     }
 	
     return projectile;

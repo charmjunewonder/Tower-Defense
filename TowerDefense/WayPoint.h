@@ -18,5 +18,7 @@
 @property (nonatomic, retain) NSMutableArray *adjacentNodes;
 @property (nonatomic, retain) WayPoint *fromNode;
 @property (nonatomic, assign) BOOL isVisited;
+@property (nonatomic) BOOL isOccupied;
+@property (nonatomic) CGPoint tileLocation;
 
 @end

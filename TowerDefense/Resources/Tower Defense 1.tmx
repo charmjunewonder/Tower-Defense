@@ -7,6 +7,11 @@
     <property name="Buildable" value="1"/>
    </properties>
   </tile>
+  <tile id="183">
+   <properties>
+    <property name="Buildable" value="2"/>
+   </properties>
+  </tile>
   <tile id="189">
    <properties>
     <property name="Buildable" value="1"/>
@@ -20,7 +25,7 @@
  </tileset>
  <layer name="Buildable" width="20" height="17">
   <data encoding="base64" compression="zlib">
-   eJzFklEKwDAMQrPb7aQ7Rs62j/UjiG01FCYIBZOHhUT8p2djd9fJT3VlM51+mCFP7YMdGK86R5YHeE5PxsN5hYdZTLKqXGSsg3Of6k13eaxfnWW7M85OKq8j9U8uS70BhXdfnwPeK707/F4n
+   eJzFUkEKwDAIy363l+4Nnvq2HVZBxGjtBgsEWrQxWoH/cBXsvhXDjp4k1DjzGNVk+Zk/W89rRL6q2WlOpGc5Zmx8oNfxGen5fJ2Hoqpp9ZgfzF5B4r4GkPdQ+WM7WO0Hm59/axHd2V+tYFVvB9Eu7Oqx3Xrr7TweijlXuAH7vY5P
   </data>
  </layer>
  <layer name="Background" width="20" height="17">

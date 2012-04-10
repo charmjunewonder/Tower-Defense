@@ -39,8 +39,9 @@
 - (WayPoint *)getLastWaypoint;
 - (void)randomlyChooseStartNode;
 - (void)creepLogic:(ccTime)dt;
-- (void)beingFreezedForSeconds:(int)seconds;
-- (void)beingPoisonedForSeconds:(int)seconds damageRandom:(int)damageRandom damageMin:(int)damageMin;
+- (void)beingShockingForSeconds:(int)seconds;
+- (void)beingPoisonedForSeconds:(int)seconds poinsonousDamage:(int)damage;
+- (void)findShortestPath;
 @end
 
 @interface FastRedCreep : Creep {

@@ -13,6 +13,8 @@
 @synthesize adjacentNodes = _adjacentNodes;
 @synthesize fromNode = _fromNode;
 @synthesize isVisited = _isVisited;
+@synthesize isOccupied = _isOccupied;
+@synthesize tileLocation = _tileLocation;
 
 - (id) init
 {

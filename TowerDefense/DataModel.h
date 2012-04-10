@@ -24,6 +24,7 @@
 @property (nonatomic, retain) NSMutableArray *targets;
 // “waypoints” are the navigation points that the creeps will follow
 @property (nonatomic, retain) NSMutableArray *waypoints;
+
 // “waves” will store the wave classes about the numbers of creeps and how fast they spawn, etc.
 @property (nonatomic, retain) NSMutableArray *waves;
 // UIPanGestureRecognizer is out ticket to smooth scrolling around the screen and the ability to have a tower defense game that is limited to 480×320.

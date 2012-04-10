@@ -259,7 +259,7 @@ static GameHUD *_sharedHUD = nil;
 		
 		if (!CGRectContainsPoint(backgroundRect, touchLocation)) {
 			CGPoint touchLocationInGameLayer = [data.gameLayer convertTouchToNodeSpace:touch];
-            [data.gameLayer addTower: touchLocationInGameLayer tag: selSprite.tag];
+            [data.gameLayer addTower: touchLocationInGameLayer];
 		}
 		
 		[self removeChild:selSprite cleanup:YES];
