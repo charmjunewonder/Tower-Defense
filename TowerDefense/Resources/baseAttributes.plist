@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>baseHealth</key>
+	<integer>100</integer>
+	<key>baseStartingMoney</key>
+	<integer>200</integer>
+	<key>baseMoneyRegen</key>
+	<integer>5</integer>
+	<key>baseMoneyRegenRate</key>
+	<real>5</real>
+	<key>baseMoneyDropped</key>
+	<integer>8</integer>
+	<key>baseTowerCostPercentage</key>
+	<real>1</real>
+</dict>
+</plist>

@@ -15,6 +15,7 @@
 @synthesize resources = _resources;
 @synthesize baseHpPercentage = _baseHpPercentage;
 @synthesize waveCount = _waveCount;
+@synthesize baseAttribute = _baseAttribute;
 
 static GameHUD *_sharedHUD = nil;
 
@@ -28,6 +29,31 @@ static GameHUD *_sharedHUD = nil;
             return _sharedHUD;
         }
 	return _sharedHUD;
+}
+
+- (NSDictionary *)baseAttribute{
+    if (!_baseAttribute) {
+        NSString *errorDesc = nil;
+        NSPropertyListFormat format;
+        NSString *plistPath;
+        NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                                  NSUserDomainMask, YES) objectAtIndex:0];
+        plistPath = [rootPath stringByAppendingPathComponent:@"baseAttribute.plist"];
+        if (![[NSFileManager defaultManager] fileExistsAtPath:plistPath]) {
+            plistPath = [[NSBundle mainBundle] pathForResource:@"baseAttribute" ofType:@"plist"];
+        }
+        NSData *plistXML = [[NSFileManager defaultManager] contentsAtPath:plistPath];
+        _baseAttribute = (NSDictionary *)[NSPropertyListSerialization
+                                              propertyListFromData:plistXML
+                                              mutabilityOption:NSPropertyListImmutable
+                                              format:&format
+                                              errorDescription:&errorDesc];
+        if (!_baseAttribute) {
+            NSLog(@"Error reading plist: %@, format: %d", errorDesc, format);
+        }
+    }
+    return _baseAttribute;
+
 }
 
 /* 
@@ -87,7 +113,8 @@ static GameHUD *_sharedHUD = nil;
         resourceLabel.position = ccp(30, (winSize.height - 15));
         resourceLabel.color = ccc3(255,80,20);
         [self addChild:resourceLabel z:1];
-        self.resources = baseAttributes.baseStartingMoney;
+        
+        self.resources = [[self.baseAttribute objectForKey:@"baseStartingMoney"] intValue];
         [self->resourceLabel setString:[NSString stringWithFormat: @"Money $%i",self.resources]];
 
         // Set up BaseHplabel
@@ -103,8 +130,8 @@ static GameHUD *_sharedHUD = nil;
         waveCountLabel.color = ccc3(255,80,20);
         [self addChild:waveCountLabel z:1];
         
-        int baseHp = baseAttributes.baseHealth;
-        self.baseHpPercentage = (baseHp/baseAttributes.baseHealth) *100;
+        int baseHp = [[self.baseAttribute objectForKey:@"baseHealth"] intValue];
+        self.baseHpPercentage = (baseHp/baseHp) *100;
         
         //Set up helth Bar
         self->healthBar = [CCProgressTimer progressWithFile:@"health_bar_green.png"];
@@ -122,7 +149,7 @@ static GameHUD *_sharedHUD = nil;
 
         [[CCTouchDispatcher sharedDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
         
-        [self schedule:@selector(updateResourcesNom) interval: baseAttributes.baseMoneyRegenRate];
+        [self schedule:@selector(updateResourcesNom) interval: [[self.baseAttribute objectForKey:@"baseMoneyRegenRate"] intValue]];
         [self schedule:@selector(update:)];
                 
     }

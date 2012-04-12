@@ -129,7 +129,10 @@
 		D1403B66152B540A003C92DE /* TutorialScene.m in Sources */ = {isa = PBXBuildFile; fileRef = D1403B61152B540A003C92DE /* TutorialScene.m */; };
 		D1403B67152B540A003C92DE /* WayPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = D1403B63152B540A003C92DE /* WayPoint.m */; };
 		D1403B6A152B56B1003C92DE /* Wave.m in Sources */ = {isa = PBXBuildFile; fileRef = D1403B69152B56B1003C92DE /* Wave.m */; };
+		D14BB9DB153677FA00C80C7B /* Creep.plist in Resources */ = {isa = PBXBuildFile; fileRef = D14BB9DA153677FA00C80C7B /* Creep.plist */; };
+		D14BB9DE15367BCC00C80C7B /* baseAttributes.plist in Resources */ = {isa = PBXBuildFile; fileRef = D14BB9DD15367BCC00C80C7B /* baseAttributes.plist */; };
 		D14CD0A81532B6F500116B72 /* projectile.png in Resources */ = {isa = PBXBuildFile; fileRef = D14CD0A71532B6F500116B72 /* projectile.png */; };
+		D17CA4F81535CB34009835CC /* Stone.plist in Resources */ = {isa = PBXBuildFile; fileRef = D17CA4F71535CB34009835CC /* Stone.plist */; };
 		D199E1CA152DDF0E00C6B739 /* BaseAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = D199E1C9152DDF0E00C6B739 /* BaseAttributes.m */; };
 		D19C445D1533D33600728D8C /* MagicStone.m in Sources */ = {isa = PBXBuildFile; fileRef = D19C445C1533D33600728D8C /* MagicStone.m */; };
 		D19C44601533ED1F00728D8C /* tower.png in Resources */ = {isa = PBXBuildFile; fileRef = D19C445F1533ED1F00728D8C /* tower.png */; };
@@ -412,7 +415,10 @@
 		D1403B63152B540A003C92DE /* WayPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WayPoint.m; sourceTree = "<group>"; };
 		D1403B68152B56B1003C92DE /* Wave.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Wave.h; sourceTree = "<group>"; };
 		D1403B69152B56B1003C92DE /* Wave.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Wave.m; sourceTree = "<group>"; };
+		D14BB9DA153677FA00C80C7B /* Creep.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Creep.plist; path = Resources/Creep.plist; sourceTree = "<group>"; };
+		D14BB9DD15367BCC00C80C7B /* baseAttributes.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = baseAttributes.plist; path = Resources/baseAttributes.plist; sourceTree = "<group>"; };
 		D14CD0A71532B6F500116B72 /* projectile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = projectile.png; path = Resources/projectile.png; sourceTree = "<group>"; };
+		D17CA4F71535CB34009835CC /* Stone.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Stone.plist; sourceTree = "<group>"; };
 		D199E1C8152DDF0E00C6B739 /* BaseAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseAttributes.h; sourceTree = "<group>"; };
 		D199E1C9152DDF0E00C6B739 /* BaseAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseAttributes.m; sourceTree = "<group>"; };
 		D19C445B1533D33600728D8C /* MagicStone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicStone.h; sourceTree = "<group>"; };
@@ -541,6 +547,9 @@
 		D14039F7152B53AF003C92DE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D14BB9DD15367BCC00C80C7B /* baseAttributes.plist */,
+				D14BB9DA153677FA00C80C7B /* Creep.plist */,
+				D17CA4F71535CB34009835CC /* Stone.plist */,
 				D19C446115343C3D00728D8C /* build tower.jpg */,
 				D19C446315343CC100728D8C /* build tower selected.jpg */,
 				D11C849015317238002B9921 /* gem 1.png */,
@@ -988,6 +997,9 @@
 				D19C44601533ED1F00728D8C /* tower.png in Resources */,
 				D19C446215343C3D00728D8C /* build tower.jpg in Resources */,
 				D19C446415343CC100728D8C /* build tower selected.jpg in Resources */,
+				D17CA4F81535CB34009835CC /* Stone.plist in Resources */,
+				D14BB9DB153677FA00C80C7B /* Creep.plist in Resources */,
+				D14BB9DE15367BCC00C80C7B /* baseAttributes.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

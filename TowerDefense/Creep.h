@@ -31,7 +31,7 @@
 @property (nonatomic)BOOL isStop;
 @property (nonatomic)float selfScale;
 @property (nonatomic)float currentRotation;
-//@property (nonatomic)int scale;
+@property (nonatomic, retain)NSDictionary *creepPropertyList;
 
 
 - (Creep *) initWithCreep:(Creep *) copyFrom; 

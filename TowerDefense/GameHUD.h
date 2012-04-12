@@ -33,6 +33,7 @@
 @property (nonatomic, assign) int resources;
 @property (nonatomic, assign) float baseHpPercentage;
 @property (nonatomic, assign) int waveCount;
+@property (nonatomic, retain) NSDictionary *baseAttribute;
 
 + (GameHUD *)sharedHUD;
 -(void) updateBaseHp:(int)amount;

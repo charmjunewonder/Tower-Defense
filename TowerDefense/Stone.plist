@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PoisonousStone</key>
+	<dict>
+		<key>tag</key>
+		<integer>1</integer>
+		<key>cost</key>
+		<integer>50</integer>
+		<key>damage</key>
+		<integer>2</integer>
+		<key>damageRandom</key>
+		<integer>5</integer>
+		<key>fireRate</key>
+		<integer>1</integer>
+		<key>range</key>
+		<integer>100</integer>
+		<key>poisonousDamage</key>
+		<integer>8</integer>
+		<key>poisoningDuration</key>
+		<integer>5</integer>
+	</dict>
+	<key>ManaGatheringStone</key>
+	<dict>
+		<key>tag</key>
+		<integer>2</integer>
+		<key>cost</key>
+		<integer>70</integer>
+		<key>damage</key>
+		<integer>0</integer>
+		<key>damageRandom</key>
+		<integer>5</integer>
+		<key>fireRate</key>
+		<integer>2</integer>
+		<key>range</key>
+		<integer>100</integer>
+	</dict>
+	<key>ShockingStone</key>
+	<dict>
+		<key>tag</key>
+		<integer>3</integer>
+		<key>cost</key>
+		<integer>120</integer>
+		<key>damage</key>
+		<integer>20</integer>
+		<key>damageRandom</key>
+		<integer>20</integer>
+		<key>fireRate</key>
+		<integer>2</integer>
+		<key>splashDist</key>
+		<integer>75</integer>
+		<key>range</key>
+		<integer>100</integer>
+		<key>shockingDuration</key>
+		<integer>1</integer>
+	</dict>
+</dict>
+</plist>

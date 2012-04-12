@@ -26,7 +26,7 @@
 @synthesize nextProjectile = _nextProjectile;
 @synthesize fireRate = _fireRate;
 @synthesize projectileTag = _projectileTag;
-
+@synthesize stonePropertyList = _stonePropertyList;
 /*
  search through all available creeps on the map and see which one is close 
  by comparing their distances. For each creep we look through we check to 
@@ -129,30 +129,55 @@
 
 - (void)specialEffect{}
 
+- (NSDictionary *)stonePropertyList{
+    if (!_stonePropertyList) {
+        NSString *errorDesc = nil;
+        NSPropertyListFormat format;
+        NSString *plistPath;
+        NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                                  NSUserDomainMask, YES) objectAtIndex:0];
+        plistPath = [rootPath stringByAppendingPathComponent:@"Stone.plist"];
+        if (![[NSFileManager defaultManager] fileExistsAtPath:plistPath]) {
+            plistPath = [[NSBundle mainBundle] pathForResource:@"Stone" ofType:@"plist"];
+        }
+        NSData *plistXML = [[NSFileManager defaultManager] contentsAtPath:plistPath];
+        _stonePropertyList = (NSDictionary *)[NSPropertyListSerialization
+                                              propertyListFromData:plistXML
+                                              mutabilityOption:NSPropertyListImmutable
+                                              format:&format
+                                              errorDescription:&errorDesc];
+        if (!_stonePropertyList) {
+            NSLog(@"Error reading plist: %@, format: %d", errorDesc, format);
+        }
+    }
+    return _stonePropertyList;
+}
+
 @end
 
 @implementation PoisonousStone
 
 @synthesize poisoningDuration = _poisoningDuration;
 @synthesize poisonousDamage = _poisonousDamage;
+
 + (id)stone{
     PoisonousStone *stone = nil;
     if ((stone = [[[super alloc] initWithFile:@"gem 1.png"]autorelease])) {
-        BaseAttributes *baseAttributes = [BaseAttributes sharedAttributes];
         
-        stone.damageMin = baseAttributes.baseMGDamage;
-        stone.damageRandom = baseAttributes.baseMGDamageRandom;
-        stone.range = baseAttributes.baseMGRange;
-        stone.projectileTag = 1;
-        stone.poisonousDamage = 8;
-        
-        [stone schedule:@selector(stoneLogic:) interval:baseAttributes.baseMGFireRate];
-        
+        NSDictionary *stonePList = [stone.stonePropertyList objectForKey:@"PoisonousStone"];
+
+        stone.damageMin = [[stonePList objectForKey:@"damage"] intValue];
+        stone.damageRandom = [[stonePList objectForKey:@"damageRandom"] intValue];
+        stone.range = [[stonePList objectForKey:@"range"] intValue];
+        stone.projectileTag = [[stonePList objectForKey:@"tag"] intValue];
+        stone.poisonousDamage = [[stonePList objectForKey:@"poisonousDamage"] intValue];
+        stone.fireRate = [[stonePList objectForKey:@"fireRate"] floatValue];
         stone.level = 1;
-        stone.poisoningDuration = 5;
+        stone.poisoningDuration = [[stonePList objectForKey:@"poisoningDuration"] intValue];
+
+        [stone schedule:@selector(stoneLogic:) interval:stone.fireRate];
         
 		stone.target = nil;
-        //[stone schedule:@selector(stoneLogic:) interval:1];
         //[stone schedule:@selector(checkTarget) interval:0.5];
         //[stone schedule:@selector(checkExperience) interval:0.5];
     }
@@ -172,16 +197,16 @@
 + (id)stone{
     ManaGatheringStone *stone = nil;
     if ((stone = [[[super alloc] initWithFile:@"gem 2.png"] autorelease])) {
-        BaseAttributes *baseAttributes = [BaseAttributes sharedAttributes];
-        
-        stone.damageMin = baseAttributes.baseFDamage;
-        stone.damageRandom = baseAttributes.baseFDamageRandom;
-        stone.range = baseAttributes.baseFRange;
-        stone.projectileTag = 2;
-        [stone schedule:@selector(stoneLogic:) interval:baseAttributes.baseFFireRate];
-
+        NSDictionary *stonePList = [stone.stonePropertyList objectForKey:@"ManaGatheringStone"];
+        stone.damageMin = [[stonePList objectForKey:@"damage"] intValue];
+        stone.damageRandom = [[stonePList objectForKey:@"damageRandom"] intValue];
+        stone.range = [[stonePList objectForKey:@"range"] intValue];
+        stone.projectileTag = [[stonePList objectForKey:@"tag"] intValue];
+        stone.fireRate = [[stonePList objectForKey:@"fireRate"] floatValue];
         stone.level = 1;
         
+        [stone schedule:@selector(stoneLogic:) interval:stone.fireRate];
+
 		stone.target = nil;
 		//[stone schedule:@selector(stoneLogic:) interval:1];
         //[stone schedule:@selector(checkExperience) interval:0.5];
@@ -204,22 +229,22 @@
 + (id)stone{
     ShockingStone *stone = nil;
     if ((stone = [[[super alloc] initWithFile:@"gem 3.jpg"] autorelease])) {
-        BaseAttributes *baseAttributes = [BaseAttributes sharedAttributes];
         
-        stone.damageMin = baseAttributes.baseCDamage;
-        stone.damageRandom = baseAttributes.baseCDamageRandom;
-        stone.range = baseAttributes.baseMGRange;
-        stone.projectileTag = 3;
-        stone.shockingDuration = 0;
-        
-        stone.level = 1;
+        NSDictionary *stonePList = [stone.stonePropertyList objectForKey:@"ShockingStone"];
+        stone.damageMin = [[stonePList objectForKey:@"damage"] intValue];
+        stone.damageRandom = [[stonePList objectForKey:@"damageRandom"] intValue];
+        stone.range = [[stonePList objectForKey:@"range"] intValue];
+        stone.projectileTag = [[stonePList objectForKey:@"tag"] intValue];
+        stone.fireRate = [[stonePList objectForKey:@"fireRate"] floatValue];
+        stone.shockingDuration = [[stonePList objectForKey:@"shockingDuration"] intValue];
+
 		stone.target = nil;
         
         //[stone schedule:@selector(checkExperience) interval:0.5];
         //[stone schedule:@selector(stoneLogic:) interval:baseAttributes.baseCFireRate];
 
 		stone.target = nil;
-		[stone schedule:@selector(stoneLogic:) interval:2];
+		[stone schedule:@selector(stoneLogic:) interval:stone.fireRate];
 		
     }
 	
@@ -229,7 +254,7 @@
 
 - (void)specialEffect{
     self.target.color = blueColor;
-    [self.target beingShockingForSeconds:1];
+    [self.target beingShockingForSeconds:self.shockingDuration];
 }
 
 @end

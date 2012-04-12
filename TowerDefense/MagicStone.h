@@ -21,6 +21,7 @@
 @property (nonatomic) int projectileTag;
 @property (nonatomic, retain) Creep *target;
 @property (nonatomic, retain) CCSprite *nextProjectile;
+@property (nonatomic, retain) NSDictionary *stonePropertyList;
 
 - (Creep *)getClosestTarget;
 - (Creep *)getTagetThatClosestToEnd;

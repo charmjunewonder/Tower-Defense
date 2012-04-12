@@ -31,8 +31,7 @@
 @synthesize isStop = _isStop;
 @synthesize selfScale = _selfScale;
 @synthesize currentRotation = _currentRotation;
-//@synthesize scale = _scale;
-
+@synthesize creepPropertyList = _creepPropertyList;
 - (id)copyWithZone:(NSZone *)zone {
 	Creep *copy = [[[self class] allocWithZone:zone] initWithCreep:self];
 	return copy;
@@ -236,6 +235,31 @@ int inum = 0;
     [super dealloc];
 }
 
+- (NSDictionary *)creepPropertyList{
+    if (!_creepPropertyList) {
+        NSString *errorDesc = nil;
+        NSPropertyListFormat format;
+        NSString *plistPath;
+        NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                                  NSUserDomainMask, YES) objectAtIndex:0];
+        plistPath = [rootPath stringByAppendingPathComponent:@"Creep.plist"];
+        if (![[NSFileManager defaultManager] fileExistsAtPath:plistPath]) {
+            plistPath = [[NSBundle mainBundle] pathForResource:@"Creep" ofType:@"plist"];
+        }
+        NSData *plistXML = [[NSFileManager defaultManager] contentsAtPath:plistPath];
+        _creepPropertyList = (NSDictionary *)[NSPropertyListSerialization
+                                              propertyListFromData:plistXML
+                                              mutabilityOption:NSPropertyListImmutable
+                                              format:&format
+                                              errorDescription:&errorDesc];
+        if (!_creepPropertyList) {
+            NSLog(@"Error reading plist: %@, format: %d", errorDesc, format);
+        }
+    }
+    return _creepPropertyList;
+}
+
+
 @end
 
 @implementation FastRedCreep
@@ -244,9 +268,9 @@ int inum = 0;
     
     FastRedCreep *creep = nil;
     if ((creep = [[[super alloc] initWithFile:@"cockroach.png"] autorelease])) {
-        BaseAttributes* baseAttributes = [BaseAttributes sharedAttributes];
-        creep.hp = creep.totalHp = baseAttributes.baseRedCreepHealth;
-        creep.moveDuration = baseAttributes.baseRedCreepMoveDur;
+        NSDictionary *creepPList = [creep.creepPropertyList objectForKey:@"FastCreep"];
+        creep.hp = creep.totalHp = [[creepPList objectForKey:@"health"] intValue];
+        creep.moveDuration = [[creepPList objectForKey:@"moveDuration"] floatValue];
         creep.rotateAddition = 90;
         creep.selfScale = 1;
         [creep randomlyChooseStartNode];
@@ -281,9 +305,9 @@ int inum = 0;
     
     StrongGreenCreep *creep = nil;
     if ((creep = [[[super alloc] initWithFile:@"image 1797.png"] autorelease])) {
-        BaseAttributes* baseAttributes = [BaseAttributes sharedAttributes];
-        creep.hp = creep.totalHp = baseAttributes.baseGreenCreepHealth;
-        creep.moveDuration = baseAttributes.baseGreenCreepMoveDur;
+        NSDictionary *creepPList = [creep.creepPropertyList objectForKey:@"GreenCreep"];
+        creep.hp = creep.totalHp = [[creepPList objectForKey:@"health"] intValue];
+        creep.moveDuration = [[creepPList objectForKey:@"moveDuration"] floatValue];
         creep.rotateAddition = creep.rotation = 90;
         creep.scale = creep.selfScale = 0.5;
         [creep randomlyChooseStartNode];
@@ -302,9 +326,9 @@ int inum = 0;
     BossBrownCreep *creep = nil;
     
     if ((creep = [[[super alloc] initWithFile:@"Enemy3.png"] autorelease])) {
-        BaseAttributes* baseAttributes = [BaseAttributes sharedAttributes];
-        creep.hp = creep.totalHp = baseAttributes.baseBrownCreepHealth;
-        creep.moveDuration = baseAttributes.baseBrownCreepMoveDur;
+        NSDictionary *creepPList = [creep.creepPropertyList objectForKey:@"BrownCreep"];
+        creep.hp = creep.totalHp = [[creepPList objectForKey:@"health"] intValue];
+        creep.moveDuration = [[creepPList objectForKey:@"moveDuration"] floatValue];
         [creep randomlyChooseStartNode];
         [creep schedule:@selector(creepLogic:) interval:creep.moveDuration];
         [creep schedule:@selector(healthBarLogic:)];
